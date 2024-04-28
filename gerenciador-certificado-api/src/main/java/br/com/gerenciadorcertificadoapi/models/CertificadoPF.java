@@ -1,10 +1,7 @@
 package br.com.gerenciadorcertificadoapi.models;
 
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class CertificadoPF {
@@ -12,14 +9,18 @@ public class CertificadoPF {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String UUID;
+    @Column(nullable = false, length = 100)
     private String nome;
+    @Column(nullable = false, length = 14, unique = true)
     private String cpf;
+    @Column(nullable = false, length = 10)
     private String dataEmisao;
+    @Column(nullable = false, length = 10)
     private String dataVencimento;
+    @Enumerated(EnumType.STRING)
     private TipoCertificado tipoCertificado;
 
     public CertificadoPF() {
-        tipoCertificado = TipoCertificado.PF;
     }
 
     public CertificadoPF(String UUID, String nome, String cpf, String dataEmisao, String dataVencimento) {

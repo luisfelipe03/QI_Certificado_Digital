@@ -1,35 +1,27 @@
-package br.com.gerenciadorcertificadoapi.models;
+package br.com.gerenciadorcertificadoapi.data.vo;
 
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
-import jakarta.persistence.*;
 
-@Entity
-public class CertificadoPJ {
+public class CertificadoPFVO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String UUID;
-    @Column(nullable = false, length = 100)
-    private String razaoSocial;
-    @Column(nullable = false, length = 18, unique = true)
-    private String cnpj;
-    @Column(nullable = false, length = 10)
+    private String nome;
+    private String cpf;
     private String dataEmisao;
-    @Column(nullable = false, length = 10)
     private String dataVencimento;
-    @Enumerated(EnumType.STRING)
     private TipoCertificado tipoCertificado;
 
-    public CertificadoPJ() {
+    public CertificadoPFVO() {
+        this.tipoCertificado = TipoCertificado.PF;
     }
 
-    public CertificadoPJ(String UUID, String razaoSocial, String cnpj, String dataEmisao, String dataVencimento, TipoCertificado tipoCertificado) {
+    public CertificadoPFVO(String UUID, String nome, String cpf, String dataEmisao, String dataVencimento) {
         this.UUID = UUID;
-        this.razaoSocial = razaoSocial;
-        this.cnpj = cnpj;
+        this.nome = nome;
+        this.cpf = cpf;
         this.dataEmisao = dataEmisao;
         this.dataVencimento = dataVencimento;
-        this.tipoCertificado = tipoCertificado;
+        tipoCertificado = TipoCertificado.PF;
     }
 
     public String getUUID() {
@@ -40,20 +32,20 @@ public class CertificadoPJ {
         this.UUID = UUID;
     }
 
-    public String getRazaoSocial() {
-        return razaoSocial;
+    public String getNome() {
+        return nome;
     }
 
-    public void setRazaoSocial(String razaoSocial) {
-        this.razaoSocial = razaoSocial;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getCnpj() {
-        return cnpj;
+    public String getCpf() {
+        return cpf;
     }
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getDataEmisao() {

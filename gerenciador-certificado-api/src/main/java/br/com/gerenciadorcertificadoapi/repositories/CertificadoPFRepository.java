@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CertificadoPFRepository extends JpaRepository<CertificadoPF, String> {
+
+    CertificadoPF findByCpf(String cpf);
+    CertificadoPF findByNome(String nome);
 }

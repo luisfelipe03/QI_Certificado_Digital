@@ -1,29 +1,20 @@
-package br.com.gerenciadorcertificadoapi.models;
+package br.com.gerenciadorcertificadoapi.data.vo;
 
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
-import jakarta.persistence.*;
 
-@Entity
-public class CertificadoPJ {
+public class CertificadoPJVO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String UUID;
-    @Column(nullable = false, length = 100)
     private String razaoSocial;
-    @Column(nullable = false, length = 18, unique = true)
     private String cnpj;
-    @Column(nullable = false, length = 10)
     private String dataEmisao;
-    @Column(nullable = false, length = 10)
     private String dataVencimento;
-    @Enumerated(EnumType.STRING)
     private TipoCertificado tipoCertificado;
 
-    public CertificadoPJ() {
+    public CertificadoPJVO() {
     }
 
-    public CertificadoPJ(String UUID, String razaoSocial, String cnpj, String dataEmisao, String dataVencimento, TipoCertificado tipoCertificado) {
+    public CertificadoPJVO(String UUID, String razaoSocial, String cnpj, String dataEmisao, String dataVencimento, TipoCertificado tipoCertificado) {
         this.UUID = UUID;
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;

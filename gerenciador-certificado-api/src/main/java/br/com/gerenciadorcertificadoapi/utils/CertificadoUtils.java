@@ -1,11 +1,26 @@
 package br.com.gerenciadorcertificadoapi.utils;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 public class CertificadoUtils {
+
+    public static X509Certificate carregarCertificado(byte[] arquivo, String senha) throws CertificateException, IOException, KeyStoreException, NoSuchAlgorithmException, UnrecoverableKeyException, CertificateException, IOException, NoSuchAlgorithmException, KeyStoreException {
+        KeyStore keyStore = KeyStore.getInstance("PKCS12");
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(arquivo);
+        keyStore.load(inputStream, senha.toCharArray());
+        String alias = keyStore.aliases().nextElement();
+        return (X509Certificate) keyStore.getCertificate(alias);
+    }
 
     public static String extrairCPF(X509Certificate certificado) {
         String cpf = null;
@@ -77,28 +92,23 @@ public class CertificadoUtils {
     }
 
     public static String extrairNomePF(X509Certificate certificado) {
-        String nomePF = null;
-
-        // Obter o campo Subject do certificado
-        String subject = certificado.getSubjectX500Principal().getName();
-
-        // Procurar pelo campo CN (Common Name)
-        int posicaoInicio = subject.indexOf("CN="); // Encontrar o início do campo CN
+        String nomeProprietario = null;
+        String subjectDN = certificado.getSubjectX500Principal().getName();
+        int posicaoInicio = subjectDN.indexOf("CN="); // Encontrar o início do campo CN
         if (posicaoInicio != -1) {
-            int posicaoFim = subject.indexOf(",", posicaoInicio); // Encontrar o fim do campo CN
+            int posicaoFim = subjectDN.indexOf(":", posicaoInicio); // Encontrar o fim do campo CN
             if (posicaoFim != -1) {
                 // Extrair o campo CN
-                String campoCN = subject.substring(posicaoInicio, posicaoFim);
-                // Extrair o nome após os ":" e remover possíveis espaços em branco
-                int posicaoDoisPontos = campoCN.indexOf(":");
-                if (posicaoDoisPontos != -1) {
-                    nomePF = campoCN.substring(posicaoDoisPontos + 1).trim();
-                }
+                nomeProprietario = subjectDN.substring(posicaoInicio + 3, posicaoFim).trim();
+            } else {
+                // Se não houver ":", significa que é o último campo
+                nomeProprietario = subjectDN.substring(posicaoInicio + 3).trim();
             }
         }
-
-        return nomePF;
+        return nomeProprietario;
     }
+
+
 
     public static String extrairDataEmissao(X509Certificate certificado) {
         LocalDate dataEmissao = certificado.getNotBefore().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
