@@ -75,7 +75,7 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     }
 
     @Override
-    public CertificadoPFVO findByNome(String nome) {
-        return ModelMapper.parseObject(repository.findByNome(nome), CertificadoPFVO.class);
+    public List<CertificadoPFVO> findByNome(String nome) {
+        return ModelMapper.parseListObjects(repository.findByNomeContaining(nome), CertificadoPFVO.class);
     }
 }

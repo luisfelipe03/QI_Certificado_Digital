@@ -3,6 +3,7 @@ package br.com.gerenciadorcertificadoapi.controllers;
 import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPFVO;
 import br.com.gerenciadorcertificadoapi.services.CertificadoPFService;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
+import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,24 @@ public class CertificadoPFController {
     @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
     public CertificadoPFVO getById(@PathVariable("uuid") String uuid) {
         return service.getById(uuid);
+    }
+
+    @GetMapping("/find-nome")
+    @ResponseStatus(code = HttpStatus.OK)
+    public List<CertificadoPFVO> getByName(@RequestParam("nome") String nome) {
+        return service.findByNome(nome.toUpperCase());
+    }
+
+    @GetMapping("/find-cpf")
+    @ResponseStatus(code = HttpStatus.OK)
+    public CertificadoPFVO getByCpf(@RequestParam("cpf") String cpf) throws Exception {
+        if (cpf.length() != 11) {
+            throw new Exception("CPF inválido: " + cpf);
+        }
+        // Formatar o CPF no estilo xxx.xxx.xxx-xx
+        cpf = String.format("%s.%s.%s-%s", cpf.substring(0, 3), cpf.substring(3, 6),
+                cpf.substring(6, 9), cpf.substring(9));
+        return service.findByCpf(cpf.toUpperCase());
     }
 
     @PostMapping("/upload")

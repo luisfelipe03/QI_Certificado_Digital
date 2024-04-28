@@ -13,5 +13,5 @@ public interface CertificadoPFService {
     CertificadoPFVO update(CertificadoPFVO certificadoVO);
     void delete(String uuid);
     CertificadoPFVO findByCpf(String cpf);
-    CertificadoPFVO findByNome(String nome);
+    List<CertificadoPFVO> findByNome(String nome);
 }

@@ -10,8 +10,10 @@ import java.util.List;
 @Repository
 public interface CertificadoPFRepository extends JpaRepository<CertificadoPF, String> {
 
-    CertificadoPF findByCpf(String cpf);
-    CertificadoPF findByNome(String nome);
     @Query("SELECT c FROM CertificadoPF c ORDER BY c.dataVencimento DESC")
     List<CertificadoPF> findAllOrderByDataVencimentoAsc();
+
+    CertificadoPF findByCpf(String cpf);
+
+    List<CertificadoPF> findByNomeContaining(String nome);
 }
