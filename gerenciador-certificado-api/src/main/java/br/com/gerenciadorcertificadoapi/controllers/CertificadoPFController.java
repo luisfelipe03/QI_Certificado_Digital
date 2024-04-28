@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/certificado-pf")
+@CrossOrigin(origins = "*")
 public class CertificadoPFController {
 
     @Autowired
@@ -51,19 +52,12 @@ public class CertificadoPFController {
             informacoes.setDataVencimento(CertificadoUtils.extrairDataVencimento(certificado));
 
             // Retornar as informações do certificado
-            return ResponseEntity.ok(service.create(informacoes));
+            return ResponseEntity.status(HttpStatus.CREATED).body(service.create(informacoes));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao ler o arquivo PFX.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao processar o certificado: " + e.getMessage());
         }
-    }
-
-    @PutMapping("/{uuid}")
-    @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
-    public CertificadoPFVO update(@PathVariable("uuid") String uuid, @RequestBody CertificadoPFVO certificadoVO) {
-        certificadoVO.setUUID(uuid);
-        return service.update(certificadoVO);
     }
 
     @DeleteMapping("/{uuid}")

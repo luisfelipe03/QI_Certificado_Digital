@@ -1,8 +1,11 @@
 package br.com.gerenciadorcertificadoapi.data.vo;
 
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({"UUID", "nome", "cpf", "dataEmisao", "dataVencimento", "tipoCertificado"})
 public class CertificadoPFVO {
+
 
     private String UUID;
     private String nome;

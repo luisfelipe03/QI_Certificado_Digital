@@ -24,7 +24,7 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     @Override
     public List<CertificadoPFVO> findAll() {
         logger.info("Listando todos os certificados PF.");
-        return ModelMapper.parseListObjects(repository.findAll(), CertificadoPFVO.class);
+        return ModelMapper.parseListObjects(repository.findAllOrderByDataVencimentoAsc(), CertificadoPFVO.class);
     }
 
     @Override
