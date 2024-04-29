@@ -3,7 +3,6 @@ package br.com.gerenciadorcertificadoapi.controllers;
 import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPFVO;
 import br.com.gerenciadorcertificadoapi.services.CertificadoPFService;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
-import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
