@@ -56,21 +56,28 @@ public class CertificadoUtils {
         // Obter o campo Subject do certificado
         String subject = certificado.getSubjectX500Principal().getName();
 
-        // Procurar pelo campo OU (Organizational Unit) contendo o CNPJ
-        int posicaoOU = subject.indexOf("OU=CNPJ=");
-        if (posicaoOU != -1) {
-            int posicaoFim = subject.indexOf(",", posicaoOU); // Encontrar o fim do campo OU
-            if (posicaoFim != -1) {
-                // Extrair o CNPJ
-                cnpj = subject.substring(posicaoOU + 8, posicaoFim); // +8 para ignorar o "OU=CNPJ="
-                // Formatar o CNPJ no estilo xx.xxx.xxx/xxxx-xx
-                cnpj = String.format("%s.%s.%s/%s-%s", cnpj.substring(0, 2), cnpj.substring(2, 5),
-                        cnpj.substring(5, 8), cnpj.substring(8, 12), cnpj.substring(12));
+        // Procurar pelo caractere ":" para identificar o início do CNPJ
+        int posicaoDoisPontos = subject.indexOf(":");
+        if (posicaoDoisPontos != -1) {
+            // Extrair o CNPJ após os ":"
+            cnpj = subject.substring(posicaoDoisPontos + 1).trim();
+
+            // Encontrar a posição da primeira vírgula após o CNPJ
+            int posicaoVirgula = cnpj.indexOf(",");
+            if (posicaoVirgula != -1) {
+                // Substring apenas até a primeira vírgula para remover informações adicionais
+                cnpj = cnpj.substring(0, posicaoVirgula);
             }
+
+            // Formatar o CNPJ
+            cnpj = String.format("%s.%s.%s/%s-%s", cnpj.substring(0, 2), cnpj.substring(2, 5),
+                    cnpj.substring(5, 8), cnpj.substring(8, 12), cnpj.substring(12));
         }
 
         return cnpj;
     }
+
+
 
     public static String extrairRazaoSocial(X509Certificate certificado) {
         String razaoSocial = null;
@@ -78,13 +85,13 @@ public class CertificadoUtils {
         // Obter o campo Subject do certificado
         String subject = certificado.getSubjectX500Principal().getName();
 
-        // Procurar pelo campo OU (Organizational Unit)
-        int posicaoOU = subject.indexOf("OU="); // Encontrar o início do campo OU
-        if (posicaoOU != -1) {
-            int posicaoFim = subject.indexOf(",", posicaoOU); // Encontrar o fim do campo OU
+        // Procurar pelo campo CN (Common Name)
+        int posicaoCN = subject.indexOf("CN="); // Encontrar o início do campo CN
+        if (posicaoCN != -1) {
+            int posicaoFim = subject.indexOf(":", posicaoCN); // Encontrar o fim do campo CN
             if (posicaoFim != -1) {
-                // Extrair o campo OU
-                razaoSocial = subject.substring(posicaoOU + 3, posicaoFim); // +3 para ignorar o "OU="
+                // Extrair o campo CN
+                razaoSocial = subject.substring(posicaoCN + 3, posicaoFim); // +3 para ignorar o "CN="
             }
         }
 

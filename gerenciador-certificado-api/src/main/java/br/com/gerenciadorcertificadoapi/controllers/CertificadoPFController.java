@@ -28,7 +28,7 @@ public class CertificadoPFController {
         return service.findAll();
     }
 
-    @GetMapping("/{uuid}")
+    @GetMapping("/id/{uuid}")
     @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
     public CertificadoPFVO getById(@PathVariable("uuid") String uuid) {
         return service.getById(uuid);
@@ -42,9 +42,9 @@ public class CertificadoPFController {
 
     @GetMapping("/find-cpf")
     @ResponseStatus(code = HttpStatus.OK)
-    public CertificadoPFVO getByCpf(@RequestParam("cpf") String cpf) throws Exception {
+    public CertificadoPFVO getByCpf(@RequestParam("cpf") String cpf) {
         if (cpf.length() != 11) {
-            throw new Exception("CPF inválido: " + cpf);
+            throw new IllegalArgumentException("CPF inválido: " + cpf);
         }
         // Formatar o CPF no estilo xxx.xxx.xxx-xx
         cpf = String.format("%s.%s.%s-%s", cpf.substring(0, 3), cpf.substring(3, 6),

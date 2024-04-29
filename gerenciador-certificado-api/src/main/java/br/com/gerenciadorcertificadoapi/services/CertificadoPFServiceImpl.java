@@ -46,22 +46,6 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     }
 
     @Override
-    public CertificadoPFVO update(CertificadoPFVO certificadoVO) {
-        logger.info("Atualizando cadastro do certificado PF.");
-
-        var entity = repository.findById(certificadoVO.getUUID()).orElseThrow(
-                () -> new ResourceNotFoundException("Não existe certificado cadastrado com id: " + certificadoVO.getUUID()));
-
-        entity.setNome(certificadoVO.getNome());
-        entity.setCpf(certificadoVO.getCpf());
-        entity.setDataEmisao(certificadoVO.getDataEmisao());
-        entity.setDataVencimento(certificadoVO.getDataVencimento());
-
-        return ModelMapper.parseObject(repository.save(entity), CertificadoPFVO.class);
-
-    }
-
-    @Override
     public void delete(String uuid) {
         logger.info("Deletando certificado PF.");
         CertificadoPF entity = repository.findById(uuid)
@@ -71,11 +55,19 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
 
     @Override
     public CertificadoPFVO findByCpf(String cpf) {
-        return ModelMapper.parseObject(repository.findByCpf(cpf), CertificadoPFVO.class);
+        CertificadoPF certificado = repository.findByCpf(cpf);
+        if (certificado == null) {
+            throw new ResourceNotFoundException("Não existe certificado cadastrado com CPF: " + cpf);
+        }
+        return ModelMapper.parseObject(certificado, CertificadoPFVO.class);
     }
 
     @Override
     public List<CertificadoPFVO> findByNome(String nome) {
-        return ModelMapper.parseListObjects(repository.findByNomeContaining(nome), CertificadoPFVO.class);
+        List<CertificadoPF> certificados = repository.findByNomeContaining(nome);
+        if (certificados.isEmpty()) {
+            throw new ResourceNotFoundException("Não existe certificado cadastrado com nome: " + nome);
+        }
+        return ModelMapper.parseListObjects(certificados, CertificadoPFVO.class);
     }
 }
