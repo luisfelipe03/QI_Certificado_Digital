@@ -59,6 +59,11 @@ public class CertificadoPJController {
             // Carregar o certificado digital a partir do arquivo PFX
             X509Certificate certificado = CertificadoUtils.carregarCertificado(arquivoPfx.getBytes(), senha);
 
+            // Verificar se o certificado é de pessoa física
+            if (!CertificadoUtils.isCertificadoPessoaJuridica(certificado)) {
+                return ResponseEntity.badRequest().body("O certificado fornecido não é de pessoa jurídica.");
+            }
+
             // Crianção de um objeto para armazenar as informações do certificado
             CertificadoPJVO informacoes = new CertificadoPJVO();
             informacoes.setCnpj(CertificadoUtils.extrairCNPJ(certificado));

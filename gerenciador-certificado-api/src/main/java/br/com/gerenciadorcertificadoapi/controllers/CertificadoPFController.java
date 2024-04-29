@@ -62,6 +62,10 @@ public class CertificadoPFController {
             // Carregar o certificado digital a partir do arquivo PFX
             X509Certificate certificado = CertificadoUtils.carregarCertificado(arquivoPfx.getBytes(), senha);
 
+            if (!CertificadoUtils.isCertificadoPessoaFisica(certificado)) {
+                return ResponseEntity.badRequest().body("O certificado fornecido não é de pessoa física.");
+            }
+
             // Crianção de um objeto para armazenar as informações do certificado
             CertificadoPFVO informacoes = new CertificadoPFVO();
             informacoes.setNome(CertificadoUtils.extrairNomePF(certificado));

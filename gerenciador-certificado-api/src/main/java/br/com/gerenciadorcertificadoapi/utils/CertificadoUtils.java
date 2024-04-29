@@ -131,4 +131,49 @@ public class CertificadoUtils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return data.format(formatter);
     }
+
+    public static boolean isCertificadoPessoaFisica(X509Certificate certificado) {
+        String cpf = null;
+
+        // Obter o campo Subject do certificado
+        String subject = certificado.getSubjectX500Principal().getName();
+
+        // Procurar pelo campo CN (Common Name)
+        int posicaoInicio = subject.indexOf("CN="); // Encontrar o início do campo CN
+        if (posicaoInicio != -1) {
+            int posicaoFim = subject.indexOf(",", posicaoInicio); // Encontrar o fim do campo CN
+            if (posicaoFim != -1) {
+                // Extrair o campo CN
+                String campoCN = subject.substring(posicaoInicio, posicaoFim);
+                // Extrair o CPF após os ":"
+                int posicaoDoisPontos = campoCN.indexOf(":");
+                if (posicaoDoisPontos != -1) {
+                    cpf = campoCN.substring(posicaoDoisPontos + 1).trim();
+                }
+            }
+        }
+        return cpf != null && cpf.length() == 11;
+    }
+
+    public static boolean isCertificadoPessoaJuridica(X509Certificate certificado) {
+        String cnpj = null;
+
+        // Obter o campo Subject do certificado
+        String subject = certificado.getSubjectX500Principal().getName();
+
+        // Procurar pelo caractere ":" para identificar o início do CNPJ
+        int posicaoDoisPontos = subject.indexOf(":");
+        if (posicaoDoisPontos != -1) {
+            // Extrair o CNPJ após os ":"
+            cnpj = subject.substring(posicaoDoisPontos + 1).trim();
+
+            // Encontrar a posição da primeira vírgula após o CNPJ
+            int posicaoVirgula = cnpj.indexOf(",");
+            if (posicaoVirgula != -1) {
+                // Substring apenas até a primeira vírgula para remover informações adicionais
+                cnpj = cnpj.substring(0, posicaoVirgula);
+            }
+        }
+        return cnpj != null && cnpj.length() == 14;
+    }
 }
