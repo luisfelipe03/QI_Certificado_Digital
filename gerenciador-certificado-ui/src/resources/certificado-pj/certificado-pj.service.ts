@@ -1,12 +1,25 @@
 import { CertificadoPJ } from './certificado-pj.resources';
 
 class CertificadoPJService {
-    baseUrl: string = 'http://localhost:8080/api/certificado-pj';
+    private baseUrl: string;
 
-    async getAll() : Promise<CertificadoPJ[]> {
-        const response = await fetch(this.baseUrl);
-        return await response.json();
+    constructor(baseUrl: string) {
+        this.baseUrl = baseUrl;
+    }
+
+    async getAllByTipo(tipo: string): Promise<CertificadoPJ[]> {
+        try {
+            const response = await fetch(`${this.baseUrl}/${tipo}`);
+            if (!response.ok) {
+                throw new Error('Erro ao buscar os certificados');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Erro ao buscar os certificados:', error);
+            return [];
+        }
     }
 }
 
-export const useCertificadoPJService = () => new CertificadoPJService();
+const BASE_URL = 'http://localhost:8080/api/certificado-pj';
+export const useCertificadoPJService = () => new CertificadoPJService(BASE_URL);

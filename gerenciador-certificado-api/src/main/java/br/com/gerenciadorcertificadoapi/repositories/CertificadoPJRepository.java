@@ -1,6 +1,5 @@
 package br.com.gerenciadorcertificadoapi.repositories;
 
-import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
 import br.com.gerenciadorcertificadoapi.models.CertificadoPJ;
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,7 +14,6 @@ public interface CertificadoPJRepository extends JpaRepository<CertificadoPJ, St
 
     CertificadoPJ findByCnpj(String cnpj);
     List<CertificadoPJ> findByRazaoSocialContaining(String razaoSocial);
-    List<CertificadoPJ> findByTipoCertificado(String tipoCertificado);
     @Query("SELECT c FROM CertificadoPJ c WHERE c.tipoCertificado = :tipo ORDER BY c.dataVencimento ASC")
     List<CertificadoPJ> findAllOrderByDataVencimentoAscAndTipoCertificado(@Param("tipo") TipoCertificado tipo);
 
