@@ -14,7 +14,7 @@ public class CertificadoPJ {
     @Column(nullable = false, length = 18, unique = true)
     private String cnpj;
     @Column(nullable = false, length = 10)
-    private String dataEmisao;
+    private String dataEmissao;
     @Column(nullable = false, length = 10)
     private String dataVencimento;
     @Enumerated(EnumType.STRING)
@@ -23,11 +23,11 @@ public class CertificadoPJ {
     public CertificadoPJ() {
     }
 
-    public CertificadoPJ(String UUID, String razaoSocial, String cnpj, String dataEmisao, String dataVencimento, TipoCertificado tipoCertificado) {
+    public CertificadoPJ(String UUID, String razaoSocial, String cnpj, String dataEmissao, String dataVencimento, TipoCertificado tipoCertificado) {
         this.UUID = UUID;
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;
-        this.dataEmisao = dataEmisao;
+        this.dataEmissao = dataEmissao;
         this.dataVencimento = dataVencimento;
         this.tipoCertificado = tipoCertificado;
     }
@@ -56,12 +56,12 @@ public class CertificadoPJ {
         this.cnpj = cnpj;
     }
 
-    public String getDataEmisao() {
-        return dataEmisao;
+    public String getDataEmissao() {
+        return dataEmissao;
     }
 
-    public void setDataEmisao(String dataEmisao) {
-        this.dataEmisao = dataEmisao;
+    public void setDataEmissao(String dataEmisao) {
+        this.dataEmissao = dataEmisao;
     }
 
     public String getDataVencimento() {

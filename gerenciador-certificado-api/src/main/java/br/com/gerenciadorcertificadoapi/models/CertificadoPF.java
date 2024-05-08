@@ -14,7 +14,7 @@ public class CertificadoPF {
     @Column(nullable = false, length = 14, unique = true)
     private String cpf;
     @Column(nullable = false, length = 10)
-    private String dataEmisao;
+    private String dataEmissao;
     @Column(nullable = false, length = 10)
     private String dataVencimento;
     @Enumerated(EnumType.STRING)
@@ -23,11 +23,11 @@ public class CertificadoPF {
     public CertificadoPF() {
     }
 
-    public CertificadoPF(String UUID, String nome, String cpf, String dataEmisao, String dataVencimento) {
+    public CertificadoPF(String UUID, String nome, String cpf, String dataEmissao, String dataVencimento) {
         this.UUID = UUID;
         this.nome = nome;
         this.cpf = cpf;
-        this.dataEmisao = dataEmisao;
+        this.dataEmissao = dataEmissao;
         this.dataVencimento = dataVencimento;
         tipoCertificado = TipoCertificado.PF;
     }
@@ -56,12 +56,12 @@ public class CertificadoPF {
         this.cpf = cpf;
     }
 
-    public String getDataEmisao() {
-        return dataEmisao;
+    public String getDataEmissao() {
+        return dataEmissao;
     }
 
-    public void setDataEmisao(String dataEmisao) {
-        this.dataEmisao = dataEmisao;
+    public void setDataEmissao(String dataEmisao) {
+        this.dataEmissao = dataEmisao;
     }
 
     public String getDataVencimento() {

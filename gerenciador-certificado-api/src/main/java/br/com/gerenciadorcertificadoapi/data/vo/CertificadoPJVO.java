@@ -7,18 +7,18 @@ public class CertificadoPJVO {
     private String UUID;
     private String razaoSocial;
     private String cnpj;
-    private String dataEmisao;
+    private String dataEmissao;
     private String dataVencimento;
     private TipoCertificado tipoCertificado;
 
     public CertificadoPJVO() {
     }
 
-    public CertificadoPJVO(String UUID, String razaoSocial, String cnpj, String dataEmisao, String dataVencimento, TipoCertificado tipoCertificado) {
+    public CertificadoPJVO(String UUID, String razaoSocial, String cnpj, String dataEmissao, String dataVencimento, TipoCertificado tipoCertificado) {
         this.UUID = UUID;
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;
-        this.dataEmisao = dataEmisao;
+        this.dataEmissao = dataEmissao;
         this.dataVencimento = dataVencimento;
         this.tipoCertificado = tipoCertificado;
     }
@@ -47,12 +47,12 @@ public class CertificadoPJVO {
         this.cnpj = cnpj;
     }
 
-    public String getDataEmisao() {
-        return dataEmisao;
+    public String getDataEmissao() {
+        return dataEmissao;
     }
 
-    public void setDataEmisao(String dataEmisao) {
-        this.dataEmisao = dataEmisao;
+    public void setDataEmissao(String dataEmissao) {
+        this.dataEmissao = dataEmissao;
     }
 
     public String getDataVencimento() {

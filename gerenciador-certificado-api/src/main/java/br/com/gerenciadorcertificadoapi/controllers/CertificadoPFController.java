@@ -70,7 +70,7 @@ public class CertificadoPFController {
             CertificadoPFVO informacoes = new CertificadoPFVO();
             informacoes.setNome(CertificadoUtils.extrairNomePF(certificado));
             informacoes.setCpf(CertificadoUtils.extrairCPF(certificado));
-            informacoes.setDataEmisao(CertificadoUtils.extrairDataEmissao(certificado));
+            informacoes.setDataEmissao(CertificadoUtils.extrairDataEmissao(certificado));
             informacoes.setDataVencimento(CertificadoUtils.extrairDataVencimento(certificado));
 
             // Retornar as informações do certificado

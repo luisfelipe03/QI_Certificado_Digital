@@ -3,6 +3,6 @@ export class CertificadoPJ {
     razaoSocial?: string;
     cnpj?: string;
     dataEmissao?: string;
-    dataVenciemento?: string;
-    tipoCerificado?: string;
+    dataVencimento?: string;
+    tipoCertificado?: string;
 }

@@ -68,7 +68,7 @@ public class CertificadoPJController {
             CertificadoPJVO informacoes = new CertificadoPJVO();
             informacoes.setCnpj(CertificadoUtils.extrairCNPJ(certificado));
             informacoes.setRazaoSocial(CertificadoUtils.extrairRazaoSocial(certificado));
-            informacoes.setDataEmisao(CertificadoUtils.extrairDataEmissao(certificado));
+            informacoes.setDataEmissao(CertificadoUtils.extrairDataEmissao(certificado));
             informacoes.setDataVencimento(CertificadoUtils.extrairDataVencimento(certificado));
             informacoes.setTipoCertificado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
 

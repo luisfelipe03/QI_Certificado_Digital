@@ -1,5 +1,6 @@
 interface TemplateProps {
     children: React.ReactNode;
+    loading?: boolean;
 }
 
 export const Template: React.FC<TemplateProps> = (props: TemplateProps) => {
@@ -7,7 +8,13 @@ export const Template: React.FC<TemplateProps> = (props: TemplateProps) => {
         <>
             <Header />
             <div className="container mx-auto mt-8 px-4 text-black">
-                {props.children}
+                {props.loading && (
+                    <div className="flex items-center justify-center">
+                        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-500 border-solid mr-3"></div>
+                        <span className="text-gray-600 font-semibold">Carregando...</span>
+                    </div>
+                )}
+                {!props.loading && props.children}
             </div>
             <Footer />
         </>
@@ -18,7 +25,7 @@ const Header: React.FC = () => {
     return (
         <header className="bg-indigo-950 text-white py-3" >
             <div className="container mx-auto flex justofy-between items-center px-4">
-                <h1 className="text-3xl font-bold">ImageLite</h1>
+                <h1 className="text-3xl font-bold">QI Assessoria</h1>
             </div>
         </header>
     );
@@ -26,9 +33,9 @@ const Header: React.FC = () => {
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-indigo-950 text-white py-4 mt-8" >
+        <footer className="bg-indigo-950 text-white py-4 mt-8 fixed bottom-0 w-full" >
             <div className="container mx-auto text-center">
-                Desenvolvido por Luis Felipe
+                <a href="https://github.com/luisfelipe03" target="_blank">Desenvolvido por Luis Felipe</a>
             </div>
         </footer>
     );

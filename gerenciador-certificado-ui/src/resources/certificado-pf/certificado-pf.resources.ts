@@ -3,6 +3,6 @@ export class CertificadoPF {
     nome?: string;
     cpf?: string;
     dataEmissao?: string;
-    dataVenciemento?: string;
+    dataVencimento?: string;
     tipoCerificado?: string;
 }

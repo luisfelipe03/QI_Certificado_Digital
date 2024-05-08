@@ -10,7 +10,7 @@ public class CertificadoPFVO {
     private String UUID;
     private String nome;
     private String cpf;
-    private String dataEmisao;
+    private String dataEmissao;
     private String dataVencimento;
     private TipoCertificado tipoCertificado;
 
@@ -18,11 +18,11 @@ public class CertificadoPFVO {
         this.tipoCertificado = TipoCertificado.PF;
     }
 
-    public CertificadoPFVO(String UUID, String nome, String cpf, String dataEmisao, String dataVencimento) {
+    public CertificadoPFVO(String UUID, String nome, String cpf, String dataEmissao, String dataVencimento) {
         this.UUID = UUID;
         this.nome = nome;
         this.cpf = cpf;
-        this.dataEmisao = dataEmisao;
+        this.dataEmissao = dataEmissao;
         this.dataVencimento = dataVencimento;
         tipoCertificado = TipoCertificado.PF;
     }
@@ -51,12 +51,12 @@ public class CertificadoPFVO {
         this.cpf = cpf;
     }
 
-    public String getDataEmisao() {
-        return dataEmisao;
+    public String getDataEmissao() {
+        return dataEmissao;
     }
 
-    public void setDataEmisao(String dataEmisao) {
-        this.dataEmisao = dataEmisao;
+    public void setDataEmissao(String dataEmissao) {
+        this.dataEmissao = dataEmissao;
     }
 
     public String getDataVencimento() {
