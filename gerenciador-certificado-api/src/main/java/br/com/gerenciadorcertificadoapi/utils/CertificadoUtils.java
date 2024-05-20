@@ -1,5 +1,10 @@
 package br.com.gerenciadorcertificadoapi.utils;
 
+import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPFVO;
+import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPJVO;
+import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
+import br.com.gerenciadorcertificadoapi.models.CertificadoPJ;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.KeyStore;
@@ -11,6 +16,7 @@ import java.security.cert.X509Certificate;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class CertificadoUtils {
 
@@ -175,5 +181,17 @@ public class CertificadoUtils {
             }
         }
         return cnpj != null && cnpj.length() == 14;
+    }
+
+    public static boolean isValido(X509Certificate certificado) {
+        return certificado.getNotAfter().after(new Date());
+    }
+
+    public static  boolean isValidoPJ(CertificadoPJ certificado) {
+        return LocalDate.parse(certificado.getDataVencimento(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).isAfter(LocalDate.now());
+    }
+
+    public static  boolean isValidoPF(CertificadoPF certificado) {
+        return LocalDate.parse(certificado.getDataVencimento(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).isAfter(LocalDate.now());
     }
 }

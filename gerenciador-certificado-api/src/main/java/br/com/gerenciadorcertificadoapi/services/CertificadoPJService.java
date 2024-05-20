@@ -9,6 +9,7 @@ import java.util.List;
 public interface CertificadoPJService {
 
     List<CertificadoPJVO> findAll(TipoCertificado tipoCertificado);
+    List<CertificadoPJVO> findAllExpired(TipoCertificado tipoCertificado);
     CertificadoPJVO getById(String uuid);
     CertificadoPJVO create(CertificadoPJVO certificadoVO);
     void delete(String uuid);

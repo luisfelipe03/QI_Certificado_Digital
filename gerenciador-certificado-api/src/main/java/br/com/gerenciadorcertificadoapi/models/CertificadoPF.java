@@ -19,17 +19,20 @@ public class CertificadoPF {
     private String dataVencimento;
     @Enumerated(EnumType.STRING)
     private TipoCertificado tipoCertificado;
+    @Column(nullable = false)
+    private boolean isValido = false;
 
     public CertificadoPF() {
     }
 
-    public CertificadoPF(String UUID, String nome, String cpf, String dataEmissao, String dataVencimento) {
+    public CertificadoPF(String UUID, String nome, String cpf, String dataEmissao, String dataVencimento, boolean isValido) {
         this.UUID = UUID;
         this.nome = nome;
         this.cpf = cpf;
         this.dataEmissao = dataEmissao;
         this.dataVencimento = dataVencimento;
         tipoCertificado = TipoCertificado.PF;
+        this.isValido = isValido;
     }
 
     public String getUUID() {
@@ -78,6 +81,14 @@ public class CertificadoPF {
 
     public void setTipoCertificado(TipoCertificado tipoCertificado) {
         this.tipoCertificado = tipoCertificado;
+    }
+
+    public boolean isValido() {
+        return isValido;
+    }
+
+    public void setValido(boolean isValido) {
+        this.isValido = isValido;
     }
 
 }

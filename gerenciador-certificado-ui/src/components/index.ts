@@ -1,3 +1,3 @@
 export { Template } from "./Template"
-export { CertificateTablePJ } from "./CertificateTablePJ"
-export { CertificateTablePF } from "./CertificateTablePF"
+export { CertificateTablePJ } from "./tables/CertificateTablePJ"
+export { CertificateTablePF } from "./tables/CertificateTablePF"

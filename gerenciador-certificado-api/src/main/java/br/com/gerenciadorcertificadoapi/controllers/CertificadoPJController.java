@@ -22,17 +22,26 @@ public class CertificadoPJController {
     @Autowired
     CertificadoPJService service;
 
-    @GetMapping("/{tipoCertificado}")
+    @GetMapping("/{tipoCertificado}/validos")
+    @ResponseStatus(code = HttpStatus.OK)
     public List<CertificadoPJVO> findAll(@PathVariable("tipoCertificado") String tipoCertificado) {
         return service.findAll(TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
     }
 
+    @GetMapping("/{tipoCertificado}/vencidos")
+    @ResponseStatus(code = HttpStatus.OK)
+    public List<CertificadoPJVO> findAllExpired(@PathVariable("tipoCertificado") String tipoCertificado) {
+        return service.findAllExpired(TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
+    }
+
     @GetMapping("/id/{uuid}")
+    @ResponseStatus(code = HttpStatus.OK)
     public CertificadoPJVO getById(@PathVariable("uuid") String uuid) {
         return service.getById(uuid);
     }
 
     @GetMapping("/find-cnpj")
+    @ResponseStatus(code = HttpStatus.OK)
     public CertificadoPJVO getByCnpj(@RequestParam("cnpj") String cnpj) {
         if (cnpj.length() != 14) {
             throw new IllegalArgumentException("CNPJ inválido: " + cnpj);
@@ -44,11 +53,13 @@ public class CertificadoPJController {
     }
 
     @GetMapping("/find-razao-social")
+    @ResponseStatus(code = HttpStatus.OK)
     public List<CertificadoPJVO> getByRazaoSocial(@RequestParam("razaoSocial") String razaoSocial) {
         return service.findByRazaoSocial(razaoSocial.toUpperCase());
     }
 
     @PostMapping("/upload")
+    @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseEntity<?> create(@RequestParam("certificado") MultipartFile arquivoPfx, @RequestParam("senha") String senha, @RequestParam("tipoCertificado") String tipoCertificado) {
         try {
             // Verificar se o arquivo é nulo ou vazio
@@ -71,6 +82,7 @@ public class CertificadoPJController {
             informacoes.setDataEmissao(CertificadoUtils.extrairDataEmissao(certificado));
             informacoes.setDataVencimento(CertificadoUtils.extrairDataVencimento(certificado));
             informacoes.setTipoCertificado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
+            informacoes.setValido(CertificadoUtils.isValido(certificado));
 
             // Retornar as informações do certificado
             return ResponseEntity.status(HttpStatus.CREATED).body(service.create(informacoes));
@@ -82,6 +94,7 @@ public class CertificadoPJController {
     }
 
     @DeleteMapping("/{uuid}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<?> delete(@PathVariable("uuid") String uuid) {
         service.delete(uuid);
         return ResponseEntity.ok().build();

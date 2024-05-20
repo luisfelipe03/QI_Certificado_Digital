@@ -9,7 +9,7 @@ class CertificadoPJService {
 
     async getAllByTipo(tipo: string): Promise<CertificadoPJ[]> {
         try {
-            const response = await fetch(`${this.baseUrl}/${tipo}`);
+            const response = await fetch(`${this.baseUrl}/${tipo}/validos`);
             if (!response.ok) {
                 throw new Error('Erro ao buscar os certificados');
             }

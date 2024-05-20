@@ -4,7 +4,7 @@ class CertificadoPFService {
     baseUrl: string = 'http://localhost:8080/api/certificado-pf';
 
     async getAll() : Promise<CertificadoPF[]> {
-        const response = await fetch(this.baseUrl);
+        const response = await fetch(this.baseUrl + '/validos');
         return await response.json();
     }
 

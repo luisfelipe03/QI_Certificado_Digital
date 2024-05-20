@@ -8,6 +8,7 @@ import java.util.List;
 public interface CertificadoPFService {
 
     List<CertificadoPFVO> findAll();
+    List<CertificadoPFVO> findAllExpired();
     CertificadoPFVO getById(String uuid);
     CertificadoPFVO create(CertificadoPFVO certificadoVO);
     void delete(String uuid);

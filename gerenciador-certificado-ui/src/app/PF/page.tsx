@@ -14,7 +14,7 @@ export default function PessoaFisicaPage() {
 
     async function loadCertificados() {
         setLoading(true);
-        const data = await useService.getByName(search);
+        const data = await useService.getAll();
         setCertificados(data);
         setLoading(false);
     }
@@ -23,20 +23,12 @@ export default function PessoaFisicaPage() {
         loadCertificados();
     }, []);
 
-    function renderCertificado(certificado: CertificadoPF) {
+    function renderCertificado() {
         return (
             <CertificateTablePF 
-                key={certificado.uuid}
-                nome={certificado.nome}
-                cpf={certificado.cpf}
-                dataEmissao={certificado.dataEmissao}
-                dataVencimento={certificado.dataVencimento}
+                certificadoPF={certificados}
             />
         )
-    }
-
-    function renderCertificateTable() {
-        return certificados.map((certificado: CertificadoPF) => renderCertificado(certificado)) 
     }
 
     return (
@@ -55,7 +47,7 @@ export default function PessoaFisicaPage() {
                 </section>
 
                 <ul>
-                    {renderCertificateTable()}
+                    {renderCertificado()}
                 </ul>
             </div>
         </Template>

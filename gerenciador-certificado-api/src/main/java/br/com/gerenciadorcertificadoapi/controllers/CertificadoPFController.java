@@ -21,10 +21,16 @@ public class CertificadoPFController {
     @Autowired
     CertificadoPFService service;
 
-    @GetMapping
+    @GetMapping("/validos")
     @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
     public List<CertificadoPFVO> findAll() {
         return service.findAll();
+    }
+
+    @GetMapping("/vencidos")
+    @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
+    public List<CertificadoPFVO> findAllExpired() {
+        return service.findAllExpired();
     }
 
     @GetMapping("/id/{uuid}")
@@ -72,6 +78,7 @@ public class CertificadoPFController {
             informacoes.setCpf(CertificadoUtils.extrairCPF(certificado));
             informacoes.setDataEmissao(CertificadoUtils.extrairDataEmissao(certificado));
             informacoes.setDataVencimento(CertificadoUtils.extrairDataVencimento(certificado));
+            informacoes.setValido(CertificadoUtils.isValido(certificado));
 
             // Retornar as informações do certificado
             return ResponseEntity.status(HttpStatus.CREATED).body(service.create(informacoes));

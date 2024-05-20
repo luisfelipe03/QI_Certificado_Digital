@@ -1,6 +1,5 @@
 package br.com.gerenciadorcertificadoapi.services;
 
-import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPFVO;
 import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPJVO;
 import br.com.gerenciadorcertificadoapi.excepions.ResourceNotFoundException;
 import br.com.gerenciadorcertificadoapi.excepions.UniqueDocumentException;
@@ -8,6 +7,8 @@ import br.com.gerenciadorcertificadoapi.mapper.ModelMapper;
 import br.com.gerenciadorcertificadoapi.models.CertificadoPJ;
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
 import br.com.gerenciadorcertificadoapi.repositories.CertificadoPJRepository;
+import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.logging.Logger;
 @Service
 public class CertificadoPJServiceImpl implements CertificadoPJService {
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(CertificadoPJServiceImpl.class);
     private Logger logger = Logger.getLogger(CertificadoPJServiceImpl.class.getName());
 
     @Autowired
@@ -25,7 +27,21 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
 
     @Override
     public List<CertificadoPJVO> findAll(TipoCertificado tipoCertificado) {
-        List<CertificadoPJ> pj = repository.findAllOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado);
+        logger.info("Listando todos os certificados PJ.");
+        List<CertificadoPJ> pj = repository.findAllValidOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado);
+        for(CertificadoPJ certificado : pj) {
+            certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
+        }
+        return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
+    }
+
+    @Override
+    public List<CertificadoPJVO> findAllExpired(TipoCertificado tipoCertificado) {
+        logger.info("Listando todos os certificados PJ vencidos.");
+        List<CertificadoPJ> pj = repository.findAllExpiredOrderByDataVencimentoDescAndTipoCertificado(tipoCertificado);
+        for(CertificadoPJ certificado : pj) {
+            certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
+        }
         return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
     }
 
@@ -39,7 +55,7 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
 
     @Override
     public CertificadoPJVO create(CertificadoPJVO certificadoVO) {
-        if (repository.findByCnpj(certificadoVO.getCnpj()) != null) {
+        if (repository.findByCnpjOrderByDataVencimentoAsc(certificadoVO.getCnpj()) != null) {
             throw new UniqueDocumentException("Já existe certificado cadastrado com esse CNPJ: " + certificadoVO.getCnpj() + ".");
         }
         logger.info("Cadastrando um certificado PJ.");
@@ -57,7 +73,7 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
 
     @Override
     public CertificadoPJVO findByCnpj(String cnpj) {
-        CertificadoPJ certificado = repository.findByCnpj(cnpj);
+        CertificadoPJ certificado = repository.findByCnpjOrderByDataVencimentoAsc(cnpj);
         if(certificado == null) {
             throw new ResourceNotFoundException("Não existe certificado cadastrado com CNPJ: " + cnpj);
         }
@@ -66,7 +82,7 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
 
     @Override
     public List<CertificadoPJVO> findByRazaoSocial(String razaoSocial) {
-        List<CertificadoPJ> certificados = repository.findByRazaoSocialContaining(razaoSocial);
+        List<CertificadoPJ> certificados = repository.findByRazaoSocialContainingOrderByDataVencimentoAsc(razaoSocial);
         if (certificados.isEmpty()) {
             throw new ResourceNotFoundException("Não existe certificado cadastrado com razão social: " + razaoSocial);
         }

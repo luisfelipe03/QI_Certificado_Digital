@@ -22,20 +22,12 @@ export default function LucroPresumidoPage() {
         loadCertificados();
     }, []);
 
-    function renderCertificado(certificado: CertificadoPJ) {
+    function renderCertificado() {
         return (
            <CertificateTablePJ
-                key={certificado.uuid}
-                razaoSocial={certificado.razaoSocial}
-                cnpj={certificado.cnpj}
-                dataEmissao={certificado.dataEmissao}
-                dataVencimento={certificado.dataVencimento}
+                CertificadoPJ={certificados}
             /> 
         );
-    }
-
-    function renderCertificateTable() {
-        return certificados.map((certificado: CertificadoPJ) => renderCertificado(certificado)) 
     }
 
     return (
@@ -54,7 +46,7 @@ export default function LucroPresumidoPage() {
                 </section>
 
                 <ul>
-                    {renderCertificateTable()}
+                    {renderCertificado()}
                 </ul>
             </div>
         </Template>

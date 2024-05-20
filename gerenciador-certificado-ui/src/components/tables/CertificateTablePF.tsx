@@ -1,24 +1,23 @@
 'use client'
 
+import React from 'react';
+import { CertificadoPF } from '@/resources/certificado-pf/certificado-pf.resources';
+
 interface CertificateTablePJProps {
-    uuid?: string;
-    razaoSocial?: string;
-    cnpj?: string;
-    dataEmissao?: string;
-    dataVencimento?: string;
+    certificadoPF: CertificadoPF[];
 }
 
-export const CertificateTablePJ: React.FC<CertificateTablePJProps> = (props: CertificateTablePJProps) => {
+export const CertificateTablePF: React.FC<CertificateTablePJProps> = ({certificadoPF}) => {
     return (
         <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Razão Social
+                      Nome
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      CNPJ
+                      CPF
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Data de Emissão
@@ -29,12 +28,14 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = (props: Cer
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                    <tr key={props.uuid}>
-                      <td className="px-6 py-4 whitespace-nowrap">{props.razaoSocial}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{props.cnpj}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{props.dataEmissao}</td>
-                      <td className="px-6 py-4 whitespace-nowrap">{props.dataVencimento}</td>
-                    </tr>
+                    {certificadoPF.map((props) => (
+                      <tr key={props.uuid}>
+                        <td className="px-6 py-4 whitespace-nowrap">{props.nome}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{props.cpf}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{props.dataEmissao}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{props.dataVencimento}</td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

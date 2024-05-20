@@ -6,6 +6,7 @@ import br.com.gerenciadorcertificadoapi.excepions.UniqueDocumentException;
 import br.com.gerenciadorcertificadoapi.mapper.ModelMapper;
 import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
 import br.com.gerenciadorcertificadoapi.repositories.CertificadoPFRepository;
+import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +25,21 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     @Override
     public List<CertificadoPFVO> findAll() {
         logger.info("Listando todos os certificados PF.");
-        return ModelMapper.parseListObjects(repository.findAllOrderByDataVencimentoAsc(), CertificadoPFVO.class);
+        List<CertificadoPF> PF =  repository.findAllValidOrderByDataVencimentoAsc();
+        for(CertificadoPF certificado : PF) {
+            certificado.setValido(CertificadoUtils.isValidoPF(certificado));
+        }
+        return ModelMapper.parseListObjects(PF, CertificadoPFVO.class);
+    }
+
+    @Override
+    public List<CertificadoPFVO> findAllExpired() {
+        logger.info("Listando todos os certificados PF vencido.");
+        List<CertificadoPF> PF = repository.findAllExpiredOrderByDataVencimentoDesc();
+        for(CertificadoPF certificado : PF) {
+            certificado.setValido(CertificadoUtils.isValidoPF(certificado));
+        }
+        return ModelMapper.parseListObjects(PF, CertificadoPFVO.class);
     }
 
     @Override
@@ -37,7 +52,7 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
 
     @Override
     public CertificadoPFVO create(CertificadoPFVO certificadoVO) {
-        if (repository.findByCpf(certificadoVO.getCpf()) != null) {
+        if (repository.findByCpfOrderByDataVencimentoAsc(certificadoVO.getCpf()) != null) {
             throw new UniqueDocumentException("Já existe certificado cadastrado com esse CPF: " + certificadoVO.getCpf() + ".");
         }
         logger.info("Cadastrando um certificado PF.");
@@ -55,7 +70,7 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
 
     @Override
     public CertificadoPFVO findByCpf(String cpf) {
-        CertificadoPF certificado = repository.findByCpf(cpf);
+        CertificadoPF certificado = repository.findByCpfOrderByDataVencimentoAsc(cpf);
         if (certificado == null) {
             throw new ResourceNotFoundException("Não existe certificado cadastrado com CPF: " + cpf);
         }
@@ -64,7 +79,7 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
 
     @Override
     public List<CertificadoPFVO> findByNome(String nome) {
-        List<CertificadoPF> certificados = repository.findByNomeContaining(nome);
+        List<CertificadoPF> certificados = repository.findByNomeContainingOrderByDataVencimentoAsc(nome);
         if (certificados.isEmpty()) {
             throw new ResourceNotFoundException("Não existe certificado cadastrado com nome: " + nome);
         }
