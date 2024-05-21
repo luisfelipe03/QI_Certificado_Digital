@@ -19,9 +19,9 @@ const SquareLink = ({ href, title }: SquareLinkProps) => {
 
 export default function Home() {
   return (
-    <Template>
-      <div className="flex justify-center items-center h-screen">
-        <div className="flex justify-center space-x-3">
+    <Template footerModel={1}>
+      <div className="flex justify-center items-center space-x-3">
+        <div className="flex justify-center h-full">
           <SquareLink href="/PF" title="Pessoa Física" />
           <SquareLink href="/LR" title="Lucro Real" />
           <SquareLink href="/LP" title="Lucro Presumido" />

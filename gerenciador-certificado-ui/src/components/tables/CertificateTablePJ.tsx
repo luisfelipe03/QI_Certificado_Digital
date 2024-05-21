@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { CertificadoPJ } from '@/resources/certificado-pj/certificado-pj.resources';
+import { Button } from '../button/Button'
 
 interface CertificateTablePJProps {
     CertificadoPJ: CertificadoPJ[];
@@ -34,6 +35,7 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ Certific
                           <td className="px-6 py-4 whitespace-nowrap">{certificado.cnpj}</td>
                           <td className="px-6 py-4 whitespace-nowrap">{certificado.dataEmissao}</td>
                           <td className="px-6 py-4 whitespace-nowrap">{certificado.dataVencimento}</td>
+                          <td><Button type='button' style='bg-red-500 hover:bg-red-600' label='Excluir' /></td>
                       </tr>
                   ))}
               </tbody>

@@ -123,19 +123,13 @@ public class CertificadoUtils {
 
 
 
-    public static String extrairDataEmissao(X509Certificate certificado) {
-        LocalDate dataEmissao = certificado.getNotBefore().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return formatarData(dataEmissao);
+    public static LocalDate extrairDataEmissao(X509Certificate certificado) {
+        return certificado.getNotBefore().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
-    public static String extrairDataVencimento(X509Certificate certificado) {
-        LocalDate dataVencimento = certificado.getNotAfter().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return formatarData(dataVencimento);
-    }
+    public static LocalDate extrairDataVencimento(X509Certificate certificado) {
+        return certificado.getNotAfter().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
-    private static String formatarData(LocalDate data) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        return data.format(formatter);
     }
 
     public static boolean isCertificadoPessoaFisica(X509Certificate certificado) {
@@ -188,10 +182,10 @@ public class CertificadoUtils {
     }
 
     public static  boolean isValidoPJ(CertificadoPJ certificado) {
-        return LocalDate.parse(certificado.getDataVencimento(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).isAfter(LocalDate.now());
+        return certificado.getDataVencimento().isAfter(LocalDate.now());
     }
 
     public static  boolean isValidoPF(CertificadoPF certificado) {
-        return LocalDate.parse(certificado.getDataVencimento(), DateTimeFormatter.ofPattern("dd/MM/yyyy")).isAfter(LocalDate.now());
+        return certificado.getDataVencimento().isAfter(LocalDate.now());
     }
 }

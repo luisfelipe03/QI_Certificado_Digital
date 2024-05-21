@@ -3,6 +3,8 @@ package br.com.gerenciadorcertificadoapi.models;
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+
 @Entity
 public class CertificadoPJ {
 
@@ -11,12 +13,12 @@ public class CertificadoPJ {
     private String UUID;
     @Column(nullable = false, length = 100)
     private String razaoSocial;
-    @Column(nullable = false, length = 18, unique = true)
+    @Column(nullable = false, length = 18, unique = false)
     private String cnpj;
     @Column(nullable = false, length = 10)
-    private String dataEmissao;
+    private LocalDate dataEmissao;
     @Column(nullable = false, length = 10)
-    private String dataVencimento;
+    private LocalDate dataVencimento;
     @Enumerated(EnumType.STRING)
     private TipoCertificado tipoCertificado;
     @Column(nullable = false)
@@ -25,7 +27,7 @@ public class CertificadoPJ {
     public CertificadoPJ() {
     }
 
-    public CertificadoPJ(String UUID, String razaoSocial, String cnpj, String dataEmissao, String dataVencimento, TipoCertificado tipoCertificado, boolean isValido) {
+    public CertificadoPJ(String UUID, String razaoSocial, String cnpj, LocalDate dataEmissao, LocalDate dataVencimento, TipoCertificado tipoCertificado, boolean isValido) {
         this.UUID = UUID;
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;
@@ -59,19 +61,19 @@ public class CertificadoPJ {
         this.cnpj = cnpj;
     }
 
-    public String getDataEmissao() {
+    public LocalDate getDataEmissao() {
         return dataEmissao;
     }
 
-    public void setDataEmissao(String dataEmisao) {
-        this.dataEmissao = dataEmisao;
+    public void setDataEmissao(LocalDate dataEmissao) {
+        this.dataEmissao = dataEmissao;
     }
 
-    public String getDataVencimento() {
+    public LocalDate getDataVencimento() {
         return dataVencimento;
     }
 
-    public void setDataVencimento(String dataVencimento) {
+    public void setDataVencimento(LocalDate dataVencimento) {
         this.dataVencimento = dataVencimento;
     }
 

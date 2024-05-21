@@ -4,6 +4,7 @@ import { Template, CertificateTablePJ } from '@/components'
 import { CertificadoPJ } from '@/resources/certificado-pj/certificado-pj.resources'
 import { useCertificadoPJService } from '@/resources/certificado-pj/certificado-pj.service'
 import { useState, useEffect } from 'react' 
+import Link from 'next/link'
 
 export default function MeiPage() {
   
@@ -22,24 +23,25 @@ export default function MeiPage() {
         loadCertificados();
     }, []);
 
-    function renderCertificado(certificado: CertificadoPJ) {
+    function renderCertificado() {
         return (
-           <CertificateTablePJ
-                key={certificado.uuid}
-                razaoSocial={certificado.razaoSocial}
-                cnpj={certificado.cnpj}
-                dataEmissao={certificado.dataEmissao}
-                dataVencimento={certificado.dataVencimento}
-            /> 
+           <CertificateTablePJ CertificadoPJ={certificados}/> 
         );
     }
 
-    function renderCertificateTable() {
-        return certificados.map((certificado: CertificadoPJ) => renderCertificado(certificado)) 
-    }
 
     return (
-        <Template loading={loading}>
+        <Template footerModel={2} loading={loading}>
+            <div className='flex items-center justify-start mb-4'>
+                <Link href="/" passHref>
+                    <div className='text-blue-500 hover:underline flex items-center'>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        Voltar para Home
+                    </div>
+                </Link>
+            </div>
             <div>
                 
             <section className='flex items-center justify-between my-5'>
@@ -54,7 +56,7 @@ export default function MeiPage() {
                 </section>
 
                 <ul>
-                    {renderCertificateTable()}
+                    {renderCertificado()}
                 </ul>
             </div>
         </Template>

@@ -1,6 +1,7 @@
 package br.com.gerenciadorcertificadoapi.data.vo;
 
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import java.time.LocalDate;
@@ -13,8 +14,10 @@ public class CertificadoPFVO {
     private String UUID;
     private String nome;
     private String cpf;
-    private String dataEmissao;
-    private String dataVencimento;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataEmissao;
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataVencimento;
     private TipoCertificado tipoCertificado;
     private boolean isValido = false;
 
@@ -22,7 +25,7 @@ public class CertificadoPFVO {
         this.tipoCertificado = TipoCertificado.PF;
     }
 
-    public CertificadoPFVO(String UUID, String nome, String cpf, String dataEmissao, String dataVencimento, boolean isValido) {
+    public CertificadoPFVO(String UUID, String nome, String cpf, LocalDate dataEmissao, LocalDate dataVencimento, boolean isValido) {
         this.UUID = UUID;
         this.nome = nome;
         this.cpf = cpf;
@@ -56,19 +59,19 @@ public class CertificadoPFVO {
         this.cpf = cpf;
     }
 
-    public String getDataEmissao() {
+    public LocalDate getDataEmissao() {
         return dataEmissao;
     }
 
-    public void setDataEmissao(String dataEmissao) {
+    public void setDataEmissao(LocalDate dataEmissao) {
         this.dataEmissao = dataEmissao;
     }
 
-    public String getDataVencimento() {
+    public LocalDate getDataVencimento() {
         return dataVencimento;
     }
 
-    public void setDataVencimento(String dataVencimento) {
+    public void setDataVencimento(LocalDate dataVencimento) {
         this.dataVencimento = dataVencimento;
     }
 

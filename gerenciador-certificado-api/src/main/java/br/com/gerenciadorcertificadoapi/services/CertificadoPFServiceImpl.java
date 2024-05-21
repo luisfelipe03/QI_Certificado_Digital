@@ -5,11 +5,14 @@ import br.com.gerenciadorcertificadoapi.excepions.ResourceNotFoundException;
 import br.com.gerenciadorcertificadoapi.excepions.UniqueDocumentException;
 import br.com.gerenciadorcertificadoapi.mapper.ModelMapper;
 import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
+import br.com.gerenciadorcertificadoapi.models.CertificadoPJ;
 import br.com.gerenciadorcertificadoapi.repositories.CertificadoPFRepository;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -25,21 +28,31 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     @Override
     public List<CertificadoPFVO> findAll() {
         logger.info("Listando todos os certificados PF.");
-        List<CertificadoPF> PF =  repository.findAllValidOrderByDataVencimentoAsc();
+        List<CertificadoPF> PF =  repository.findAllOrderByDataVencimentoAsc();
+        List<CertificadoPF> obj = new ArrayList<>();
         for(CertificadoPF certificado : PF) {
             certificado.setValido(CertificadoUtils.isValidoPF(certificado));
+            repository.save(certificado);
+            if(certificado.isValido()) {
+                obj.add(certificado);
+            }
         }
-        return ModelMapper.parseListObjects(PF, CertificadoPFVO.class);
+        return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
     }
 
     @Override
     public List<CertificadoPFVO> findAllExpired() {
         logger.info("Listando todos os certificados PF vencido.");
-        List<CertificadoPF> PF = repository.findAllExpiredOrderByDataVencimentoDesc();
+        List<CertificadoPF> PF = repository.findAllOrderByDataVencimentoDesc();
+        List<CertificadoPF> obj = new ArrayList<>();
         for(CertificadoPF certificado : PF) {
             certificado.setValido(CertificadoUtils.isValidoPF(certificado));
+            repository.save(certificado);
+            if(!certificado.isValido()) {
+                obj.add(certificado);
+            }
         }
-        return ModelMapper.parseListObjects(PF, CertificadoPFVO.class);
+        return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
     }
 
     @Override
@@ -52,7 +65,7 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
 
     @Override
     public CertificadoPFVO create(CertificadoPFVO certificadoVO) {
-        if (repository.findByCpfOrderByDataVencimentoAsc(certificadoVO.getCpf()) != null) {
+        if (repository.findByCpfOrderByDataVencimentoAsc(certificadoVO.getCpf()) != null && repository.findByCpfOrderByDataVencimentoAsc(certificadoVO.getCpf()).isValido()) {
             throw new UniqueDocumentException("Já existe certificado cadastrado com esse CPF: " + certificadoVO.getCpf() + ".");
         }
         logger.info("Cadastrando um certificado PF.");

@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -29,20 +30,30 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
     public List<CertificadoPJVO> findAll(TipoCertificado tipoCertificado) {
         logger.info("Listando todos os certificados PJ.");
         List<CertificadoPJ> pj = repository.findAllValidOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado);
+        List<CertificadoPJ> obj = new ArrayList<>();
         for(CertificadoPJ certificado : pj) {
             certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
+            repository.save(certificado);
+            if(certificado.isValido()) {
+                obj.add(certificado);
+            }
         }
-        return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
+        return ModelMapper.parseListObjects(obj, CertificadoPJVO.class);
     }
 
     @Override
     public List<CertificadoPJVO> findAllExpired(TipoCertificado tipoCertificado) {
         logger.info("Listando todos os certificados PJ vencidos.");
         List<CertificadoPJ> pj = repository.findAllExpiredOrderByDataVencimentoDescAndTipoCertificado(tipoCertificado);
+        List<CertificadoPJ> obj = new ArrayList<>();
         for(CertificadoPJ certificado : pj) {
             certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
+            repository.save(certificado);
+            if(!certificado.isValido()) {
+                obj.add(certificado);
+            }
         }
-        return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
+        return ModelMapper.parseListObjects(obj, CertificadoPJVO.class);
     }
 
     @Override
@@ -55,7 +66,7 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
 
     @Override
     public CertificadoPJVO create(CertificadoPJVO certificadoVO) {
-        if (repository.findByCnpjOrderByDataVencimentoAsc(certificadoVO.getCnpj()) != null) {
+        if (repository.findByCnpjOrderByDataVencimentoAsc(certificadoVO.getCnpj()) != null && repository.findByCnpjOrderByDataVencimentoAsc(certificadoVO.getCnpj()).isValido()) {
             throw new UniqueDocumentException("Já existe certificado cadastrado com esse CNPJ: " + certificadoVO.getCnpj() + ".");
         }
         logger.info("Cadastrando um certificado PJ.");
