@@ -21,8 +21,6 @@ export const Template: React.FC<TemplateProps> = ({ children, loading, footerMod
                 )}
                 {!loading && children}
             </div>
-            {footerModel === 1 && <Footer />}
-            {footerModel === 2 && <Footer2 />}
             <ToastContainer position='top-right'
                             autoClose={8000}
                             hideProgressBar={false}
