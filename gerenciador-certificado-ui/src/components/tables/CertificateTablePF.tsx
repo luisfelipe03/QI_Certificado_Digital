@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { CertificadoPF } from '@/resources/certificado-pf/certificado-pf.resources';
 import { Button } from '../button/Button';
 import { useCertificadoPFService } from '@/resources/certificado-pf/certificado-pf.service';
+import { toast } from 'react-toastify';
 
 interface CertificateTablePFProps {
     certificadoPF: CertificadoPF[];
@@ -19,9 +20,15 @@ export const CertificateTablePF: React.FC<CertificateTablePFProps> = ({ certific
     }, [certificadoPF]);
 
     async function handleDelete(uuid: string) {
-        await service.delete(uuid);
-        setCertificados(certificados.filter(cert => cert.uuid !== uuid));
-        setConfirmDelete({ show: false, uuid: null });
+        try {
+            await service.delete(uuid);
+            setCertificados(certificados.filter(cert => cert.uuid !== uuid));
+            toast.success('Certificado excluído com sucesso!');
+        } catch (error) {
+            toast.error('Erro ao excluir o certificado. Tente novamente.');
+        } finally {
+            setConfirmDelete({ show: false, uuid: null });
+        }
     }
 
     const openConfirmDelete = (uuid: string) => {

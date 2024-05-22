@@ -5,6 +5,8 @@ import { CertificadoPF } from '@/resources/certificado-pf/certificado-pf.resourc
 import { useCertificadoPFService } from '@/resources/certificado-pf/certificado-pf.service';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function PessoaFisicaPage() {
     const useService = useCertificadoPFService();
@@ -12,31 +14,60 @@ export default function PessoaFisicaPage() {
     const [loading, setLoading] = useState<boolean>(false);
     const [search, setSearch] = useState<string>('');
     const [inputValue, setInputValue] = useState<string>('');
+    const [searchType, setSearchType] = useState<'name' | 'cpf'>('name'); // Novo estado para tipo de busca
     const [open, setOpen] = useState<boolean>(false);
 
-    async function loadCertificados(query: string = '') {
+    async function loadCertificados(query: string = '', type: 'name' | 'cpf' = 'name') {
         setLoading(true);
-        let data;
+        let data: CertificadoPF[]; // Definir data como um array de CertificadoPF
+    
         if (query === '') {
             data = await useService.getAll();
+        } else if (type === 'name') {
+            const result = await useService.getByName(query);
+            data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
         } else {
-            data = await useService.getByName(query);
+            const result = await useService.getByCpf(query);
+            data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
         }
+    
         setCertificados(data);
         setLoading(false);
-    }
+    };
+    
 
     useEffect(() => {
-        loadCertificados(search);
+        loadCertificados(search, searchType);
     }, []);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
+        let value = e.target.value;
+
+        if (searchType === 'cpf') {
+            // Remover caracteres não numéricos
+            value = value.replace(/\D/g, '');
+            // Aplicar a formatação de CPF
+            value = value.replace(/(\d{3})(\d)/, '$1.$2')
+                         .replace(/(\d{3})(\d)/, '$1.$2')
+                         .replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+        }
+
+        setInputValue(value);
+    };
+
+    const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSearchType(e.target.value as 'name' | 'cpf');
+        setInputValue(''); // Limpar o campo de entrada quando o tipo de busca mudar
     };
 
     const handleSearch = () => {
+        if (searchType === 'cpf' && inputValue.replace(/\D/g, '').length !== 11) {
+            toast.warn('Por favor, insira um CPF completo.');
+            return;
+        }
         setSearch(inputValue);
-        loadCertificados(inputValue);
+        loadCertificados(inputValue, searchType);
+        console.log(certificados);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -71,13 +102,21 @@ export default function PessoaFisicaPage() {
                     </div>
                     <div className='flex space-x-4 items-center'>
                         <div className='relative'>
+                            <select 
+                                value={searchType}
+                                onChange={handleSearchTypeChange}
+                                className='border px-4 py-2 rounded-l-lg text-gray-900'
+                            >
+                                <option value='name'>Nome</option>
+                                <option value='cpf'>CPF</option>
+                            </select>
                             <input 
                                 value={inputValue}
                                 onChange={handleSearchChange}
                                 onKeyDown={handleKeyDown}
                                 type="text"
-                                placeholder='Nome'
-                                className='border px-5 py-2 rounded-lg text-gray-900'
+                                placeholder={searchType === 'name' ? 'Nome' : 'CPF'}
+                                className='border px-5 py-2 rounded-r-lg text-gray-900'
                             />
                             {inputValue && (
                                 <button onClick={clearSearch} className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700'>

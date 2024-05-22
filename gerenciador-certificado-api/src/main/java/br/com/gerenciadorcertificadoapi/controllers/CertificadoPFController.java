@@ -48,12 +48,9 @@ public class CertificadoPFController {
     @GetMapping("/find-cpf")
     @ResponseStatus(code = HttpStatus.OK)
     public CertificadoPFVO getByCpf(@RequestParam("cpf") String cpf) {
-        if (cpf.length() != 11) {
+        if (cpf.length() != 14) {
             throw new IllegalArgumentException("CPF inválido: " + cpf);
         }
-        // Formatar o CPF no estilo xxx.xxx.xxx-xx
-        cpf = String.format("%s.%s.%s-%s", cpf.substring(0, 3), cpf.substring(3, 6),
-                cpf.substring(6, 9), cpf.substring(9));
         return service.findByCpf(cpf.toUpperCase());
     }
 

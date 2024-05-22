@@ -13,6 +13,11 @@ class CertificadoPFService {
         return await response.json();
     }
 
+    async getByCpf(cpf: string) : Promise<CertificadoPF> {
+        const response = await fetch(`${this.baseUrl}/find-cpf?cpf=${cpf}`);
+        return await response.json();
+    }
+
     async create(data: FormData) : Promise<CertificadoPF> {
         const response = await fetch(this.baseUrl, {
             method: 'POST',
