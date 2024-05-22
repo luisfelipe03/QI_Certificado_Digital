@@ -1,19 +1,23 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CertificadoPJ } from '@/resources/certificado-pj/certificado-pj.resources';
 import { useCertificadoPJService } from '@/resources/certificado-pj/certificado-pj.service';
 import { Button } from '../button/Button'
 
 interface CertificateTablePJProps {
-    CertificadoPJ: CertificadoPJ[];
+    certificadoPJ: CertificadoPJ[];
 }
 
-export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ CertificadoPJ }) => {
-    const [certificados, setCertificados] = useState<CertificadoPJ[]>(CertificadoPJ);
+export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ certificadoPJ }) => {
+    const [certificados, setCertificados] = useState<CertificadoPJ[]>(certificadoPJ || []);
     const [confirmDelete, setConfirmDelete] = useState<{ show: boolean, uuid: string | null }>({ show: false, uuid: null });
     const service = useCertificadoPJService();
-  
+
+    useEffect(() => {
+        setCertificados(Array.isArray(certificadoPJ) ? certificadoPJ : []);
+    }, [certificadoPJ]);
+
     async function handleDelete(uuid: string) {
         await service.delete(uuid);
         setCertificados(certificados.filter(cert => cert.uuid !== uuid));
@@ -28,50 +32,62 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ Certific
         setConfirmDelete({ show: false, uuid: null });
     };
 
-  
-    return (
-      <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                  <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Razão Social
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          CNPJ
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Data de Emissão
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Data de Vencimento
-                      </th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Ações
-                      </th>
-                  </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                  {CertificadoPJ.map((props) => (
-                      <tr key={props.uuid}>
-                          <td className="px-6 py-4 whitespace-nowrap">{props.razaoSocial}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">{props.cnpj}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">{props.dataEmissao}</td>
-                          <td className="px-6 py-4 whitespace-nowrap">{props.dataVencimento}</td>
-                          <td>
-                                <Button
-                                    type='button'
-                                    style='bg-red-500 hover:bg-red-600'
-                                    label='Excluir'
-                                    onClick={() => openConfirmDelete(props.uuid ?? '')}
-                                />
-                            </td>
-                      </tr>
-                  ))}
-              </tbody>
-          </table>
+    const renderTableRows = () => {
+        if (!Array.isArray(certificados)) {
+            return null;
+        }
+        return certificados.map((props) => (
+            <tr key={props.uuid}>
+                <td className="px-6 py-4 whitespace-nowrap">{props.razaoSocial}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{props.cnpj}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{props.dataEmissao}</td>
+                <td className="px-6 py-4 whitespace-nowrap">{props.dataVencimento}</td>
+                <td>
+                    <Button
+                        type='button'
+                        style='bg-red-500 hover:bg-red-600'
+                        label='Excluir'
+                        onClick={() => openConfirmDelete(props.uuid ?? '')}
+                    />
+                </td>
+            </tr>
+        ));
+    };
 
-          {confirmDelete.show && (
+    return (
+        <div className="overflow-x-auto">
+            {certificados.length === 0 ? (
+                <div className="text-center py-4">
+                    <p className="text-gray-500">Nenhum certificado encontrado.</p>
+                </div>
+            ) : (
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Razão Social
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                CNPJ
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Data de Emissão
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Data de Vencimento
+                            </th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Ações
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {renderTableRows()}
+                    </tbody>
+                </table>
+            )}
+
+            {confirmDelete.show && (
                 <div className="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-70 flex items-center justify-center">
                     <div className="bg-white p-5 rounded-lg w-1/3">
                         <h5 className="text-xl font-bold mb-4">Confirmar Exclusão</h5>
@@ -83,6 +99,6 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ Certific
                     </div>
                 </div>
             )}
-      </div>
-  );
-};
+        </div>
+    );
+}

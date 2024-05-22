@@ -96,7 +96,7 @@ export default function LucroPresumidoPage() {
                 </section>
 
                 <ul>
-                    <CertificateTablePJ CertificadoPJ={certificados} />
+                    <CertificateTablePJ certificadoPJ={certificados} />
                 </ul>
             </div>
         </Template>
