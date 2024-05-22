@@ -13,7 +13,7 @@ public interface CertificadoPJService {
     CertificadoPJVO getById(String uuid);
     CertificadoPJVO create(CertificadoPJVO certificadoVO);
     void delete(String uuid);
-    CertificadoPJVO findByCnpj(String cnpj);
-    List<CertificadoPJVO> findByRazaoSocial(String razaoSocial);
+    CertificadoPJVO findByCnpj(String cnpj, TipoCertificado tipo);
+    List<CertificadoPJVO> findByRazaoSocial(String razaoSocial, TipoCertificado tipo);
 
 }

@@ -5,11 +5,11 @@ import { CertificadoPF } from '@/resources/certificado-pf/certificado-pf.resourc
 import { Button } from '../button/Button';
 import { useCertificadoPFService } from '@/resources/certificado-pf/certificado-pf.service';
 
-interface CertificateTablePJProps {
+interface CertificateTablePFProps {
     certificadoPF: CertificadoPF[];
 }
 
-export const CertificateTablePF: React.FC<CertificateTablePJProps> = ({ certificadoPF }) => {
+export const CertificateTablePF: React.FC<CertificateTablePFProps> = ({ certificadoPF }) => {
     const [certificados, setCertificados] = useState<CertificadoPF[]>(certificadoPF);
     const [confirmDelete, setConfirmDelete] = useState<{ show: boolean, uuid: string | null }>({ show: false, uuid: null });
     const service = useCertificadoPFService();

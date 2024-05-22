@@ -83,8 +83,8 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
     }
 
     @Override
-    public CertificadoPJVO findByCnpj(String cnpj) {
-        CertificadoPJ certificado = repository.findByCnpjOrderByDataVencimentoAsc(cnpj);
+    public CertificadoPJVO findByCnpj(String cnpj, TipoCertificado tipo) {
+        CertificadoPJ certificado = repository.findByCnpjAndTipoCertificadoOrderByDataVencimentoAsc(cnpj, tipo);
         if(certificado == null) {
             throw new ResourceNotFoundException("Não existe certificado cadastrado com CNPJ: " + cnpj);
         }
@@ -92,8 +92,8 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
     }
 
     @Override
-    public List<CertificadoPJVO> findByRazaoSocial(String razaoSocial) {
-        List<CertificadoPJ> certificados = repository.findByRazaoSocialContainingOrderByDataVencimentoAsc(razaoSocial);
+    public List<CertificadoPJVO> findByRazaoSocial(String razaoSocial, TipoCertificado tipo) {
+        List<CertificadoPJ> certificados = repository.findByRazaoSocialContainingAndTipoCertificadoOrderByDataVencimentoAsc(razaoSocial, tipo);
         if (certificados.isEmpty()) {
             throw new ResourceNotFoundException("Não existe certificado cadastrado com razão social: " + razaoSocial);
         }

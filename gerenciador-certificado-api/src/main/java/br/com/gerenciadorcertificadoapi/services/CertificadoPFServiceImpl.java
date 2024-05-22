@@ -5,11 +5,9 @@ import br.com.gerenciadorcertificadoapi.excepions.ResourceNotFoundException;
 import br.com.gerenciadorcertificadoapi.excepions.UniqueDocumentException;
 import br.com.gerenciadorcertificadoapi.mapper.ModelMapper;
 import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
-import br.com.gerenciadorcertificadoapi.models.CertificadoPJ;
 import br.com.gerenciadorcertificadoapi.repositories.CertificadoPFRepository;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -93,9 +91,17 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     @Override
     public List<CertificadoPFVO> findByNome(String nome) {
         List<CertificadoPF> certificados = repository.findByNomeContainingOrderByDataVencimentoAsc(nome);
+        List<CertificadoPF> obj = new ArrayList<>();
+        for(CertificadoPF certificado : certificados) {
+            certificado.setValido(CertificadoUtils.isValidoPF(certificado));
+            repository.save(certificado);
+            if(certificado.isValido()) {
+                obj.add(certificado);
+            }
+        }
         if (certificados.isEmpty()) {
             throw new ResourceNotFoundException("Não existe certificado cadastrado com nome: " + nome);
         }
-        return ModelMapper.parseListObjects(certificados, CertificadoPFVO.class);
+        return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
     }
 }

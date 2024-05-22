@@ -12,16 +12,22 @@ import java.util.List;
 @Repository
 public interface CertificadoPJRepository extends JpaRepository<CertificadoPJ, String> {
 
-    @Query("SELECT c FROM CertificadoPJ c WHERE c.cnpj = :cnpj AND c.isValido = true ORDER BY c.dataVencimento ASC")
+    @Query("SELECT c FROM CertificadoPJ c WHERE c.cnpj = :cnpj ORDER BY c.dataVencimento ASC")
     CertificadoPJ findByCnpjOrderByDataVencimentoAsc(String cnpj);
 
-    @Query("SELECT c FROM CertificadoPJ c WHERE c.razaoSocial LIKE %:razaoSocial% AND c.isValido = true ORDER BY c.dataVencimento ASC")
+    @Query("SELECT c FROM CertificadoPJ c WHERE c.cnpj = :cnpj  AND c.tipoCertificado = :tipo ORDER BY c.dataVencimento ASC")
+    CertificadoPJ findByCnpjAndTipoCertificadoOrderByDataVencimentoAsc(String cnpj, TipoCertificado tipo);
+
+    @Query("SELECT c FROM CertificadoPJ c WHERE c.razaoSocial LIKE %:razaoSocial% AND c.tipoCertificado = :tipo ORDER BY c.dataVencimento ASC")
+    List<CertificadoPJ> findByRazaoSocialContainingAndTipoCertificadoOrderByDataVencimentoAsc(String razaoSocial, TipoCertificado tipo);
+
+    @Query("SELECT c FROM CertificadoPJ c WHERE c.razaoSocial LIKE %:razaoSocial% ORDER BY c.dataVencimento ASC")
     List<CertificadoPJ> findByRazaoSocialContainingOrderByDataVencimentoAsc(String razaoSocial);
 
-    @Query("SELECT c FROM CertificadoPJ c WHERE c.tipoCertificado = :tipo AND c.isValido = true ORDER BY c.dataVencimento ASC")
+    @Query("SELECT c FROM CertificadoPJ c WHERE c.tipoCertificado = :tipo ORDER BY c.dataVencimento ASC")
     List<CertificadoPJ> findAllValidOrderByDataVencimentoAscAndTipoCertificado(@Param("tipo") TipoCertificado tipo);
     
-    @Query("SELECT c FROM CertificadoPJ c WHERE c.tipoCertificado = :tipo AND c.isValido = false ORDER BY c.dataVencimento DESC")
+    @Query("SELECT c FROM CertificadoPJ c WHERE c.tipoCertificado = :tipo ORDER BY c.dataVencimento DESC")
     List<CertificadoPJ> findAllExpiredOrderByDataVencimentoDescAndTipoCertificado(@Param("tipo") TipoCertificado tipo);
 
 
