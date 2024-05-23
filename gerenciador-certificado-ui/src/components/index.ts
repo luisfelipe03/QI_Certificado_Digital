@@ -8,3 +8,4 @@ export { InputPJModal } from "./inputFileModal/InputPJModal"
 export { useNotification } from './notification'
 export { Button } from './button'
 export { InputText, FieldError } from './input'
+export { PaginacaoPJ } from './paginacao/index'

@@ -1,0 +1,1 @@
+export { PaginacaoPJ } from './PaginacaoPJ'
