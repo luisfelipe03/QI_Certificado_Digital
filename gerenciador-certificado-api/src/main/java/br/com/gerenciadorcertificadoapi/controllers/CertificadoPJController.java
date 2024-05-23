@@ -24,8 +24,10 @@ public class CertificadoPJController {
 
     @GetMapping("/{tipoCertificado}/validos")
     @ResponseStatus(code = HttpStatus.OK)
-    public List<CertificadoPJVO> findAll(@PathVariable("tipoCertificado") String tipoCertificado) {
-        return service.findAll(TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
+    public List<CertificadoPJVO> findAll(@PathVariable("tipoCertificado") String tipoCertificado,
+                                         @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                                         @RequestParam(value = "limit", required = false, defaultValue = "5") int limit) {
+        return service.findAllPaginado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()), page, limit);
     }
 
     @GetMapping("/{tipoCertificado}/vencidos")

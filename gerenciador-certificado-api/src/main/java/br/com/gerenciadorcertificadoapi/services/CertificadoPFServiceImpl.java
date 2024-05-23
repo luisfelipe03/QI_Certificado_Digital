@@ -8,6 +8,7 @@ import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
 import br.com.gerenciadorcertificadoapi.repositories.CertificadoPFRepository;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +28,21 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     public List<CertificadoPFVO> findAll() {
         logger.info("Listando todos os certificados PF.");
         List<CertificadoPF> PF =  repository.findAllOrderByDataVencimentoAsc();
+        List<CertificadoPF> obj = new ArrayList<>();
+        for(CertificadoPF certificado : PF) {
+            certificado.setValido(CertificadoUtils.isValidoPF(certificado));
+            repository.save(certificado);
+            if(certificado.isValido()) {
+                obj.add(certificado);
+            }
+        }
+        return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
+    }
+
+    @Override
+    public List<CertificadoPFVO> findAllPaginado(int page, int itens) {
+        logger.info("Listando todos os certificados PF.");
+        List<CertificadoPF> PF =  repository.findAllOrderByDataVencimentoAsc(PageRequest.of(page, itens));
         List<CertificadoPF> obj = new ArrayList<>();
         for(CertificadoPF certificado : PF) {
             certificado.setValido(CertificadoUtils.isValidoPF(certificado));

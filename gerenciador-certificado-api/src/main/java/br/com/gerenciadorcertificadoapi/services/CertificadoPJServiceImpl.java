@@ -10,6 +10,7 @@ import br.com.gerenciadorcertificadoapi.repositories.CertificadoPJRepository;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,6 +31,22 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
     public List<CertificadoPJVO> findAll(TipoCertificado tipoCertificado) {
         logger.info("Listando todos os certificados PJ.");
         List<CertificadoPJ> pj = repository.findAllValidOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado);
+        List<CertificadoPJ> obj = new ArrayList<>();
+        for(CertificadoPJ certificado : pj) {
+            certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
+            repository.save(certificado);
+            if(certificado.isValido()) {
+                obj.add(certificado);
+            }
+        }
+        return ModelMapper.parseListObjects(obj, CertificadoPJVO.class);
+    }
+
+    @Override
+    public List<CertificadoPJVO> findAllPaginado(TipoCertificado tipoCertificado, int page, int itens) {
+        logger.info("Listando todos os certificados PJ.");
+        List<CertificadoPJ> pj = repository.findAllValidOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado,
+                PageRequest.of(page, itens));
         List<CertificadoPJ> obj = new ArrayList<>();
         for(CertificadoPJ certificado : pj) {
             certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
