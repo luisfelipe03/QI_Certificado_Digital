@@ -26,7 +26,7 @@ public class CertificadoPJController {
     @ResponseStatus(code = HttpStatus.OK)
     public List<CertificadoPJVO> findAll(@PathVariable("tipoCertificado") String tipoCertificado,
                                          @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                         @RequestParam(value = "limit", required = false, defaultValue = "5") int limit) {
+                                         @RequestParam(value = "limit", required = false, defaultValue = "3") int limit) {
         return service.findAllPaginado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()), page, limit);
     }
 

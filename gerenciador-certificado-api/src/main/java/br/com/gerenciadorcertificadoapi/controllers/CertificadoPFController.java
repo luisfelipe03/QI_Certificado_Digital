@@ -24,7 +24,7 @@ public class CertificadoPFController {
     @GetMapping("/validos")
     @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
     public List<CertificadoPFVO> findAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                         @RequestParam(value = "limit", required = false, defaultValue = "5") int limit) {
+                                         @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
         return service.findAllPaginado(page, limit);
     }
 
