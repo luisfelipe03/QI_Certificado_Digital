@@ -4,6 +4,7 @@ import { Template, CertificateTablePJ, InputPJModal } from '@/components'
 import { CertificadoPJ } from '@/resources/certificado-pj/certificado-pj.resources'
 import { useCertificadoPJService } from '@/resources/certificado-pj/certificado-pj.service'
 import { useState, useEffect } from 'react' 
+import { toast } from 'react-toastify';
 import Link from 'next/link'
 
 export default function LucroPresumidoPage() {
@@ -12,34 +13,64 @@ export default function LucroPresumidoPage() {
     const [certificados, setCertificados] = useState<CertificadoPJ[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [search, setSearch] = useState<string>('');
+    const [searchType, setSearchType] = useState<'razao' | 'cnpj'>('razao');
     const [inputValue, setInputValue] = useState<string>('');
     const [open, setOpen] = useState<boolean>(false);
 
-    async function loadCertificados(query: string = '') {
+    async function loadCertificados(query: string = '', type: 'razao' | 'cnpj' = 'razao') {
         setLoading(true);
-        let data;
+        let data: CertificadoPJ[];
+
         if (query === '') {
             data = await useService.getAllByTipo('LR');
+        } else if (type === 'razao') {
+            const result = await useService.getByRazaoAndTipo(query, 'LR');
+            data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
         } else {
-            console.log('query', query);
-            data = await useService.getByRazaoAndTipo(query, 'LR');
+            const result = await useService.getByCnpjAndTipo(query, 'LR');
+            data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
         }
+
         setCertificados(data);
         setLoading(false);
     }
 
     useEffect(() => {
-        loadCertificados();
+        loadCertificados(search, searchType);
     }, []);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
+        let value = e.target.value;
+    
+        if (searchType === 'cnpj') {
+            // Remover caracteres não numéricos
+            value = value.replace(/\D/g, '');
+            // Aplicar a formatação de CNPJ
+            value = value.replace(/^(\d{2})(\d)/, '$1.$2')
+                         .replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+                         .replace(/\.(\d{3})(\d)/, '.$1/$2')
+                         .replace(/(\d{4})(\d)/, '$1-$2');
+        }
+    
+        setInputValue(value);
     };
+    
+    const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSearchType(e.target.value as 'razao' | 'cnpj');
+        setInputValue(''); // Limpar o campo de entrada quando o tipo de busca mudar
+    }
 
     const handleSearch = () => {
+    
+        if (searchType === 'cnpj' && inputValue.replace(/\D/g, '').length !== 14) {
+            toast.warn('Por favor, insira um CNPJ válido.');
+            return;
+        }
+    
         setSearch(inputValue);
-        loadCertificados(inputValue);
+        loadCertificados(inputValue, searchType);
     };
+    
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
@@ -73,13 +104,21 @@ export default function LucroPresumidoPage() {
                     </div>
                     <div className='flex space-x-4 items-center'>
                         <div className='relative'>
+                        <select 
+                                value={searchType}
+                                onChange={handleSearchTypeChange}
+                                className='border px-4 py-2 rounded-l-lg text-gray-900'
+                            >
+                                <option value='razao'>Razão Social</option>
+                                <option value='cnpj'>CNPJ</option>
+                            </select>
                             <input 
                                 value={inputValue}
                                 onChange={handleSearchChange}
                                 onKeyDown={handleKeyDown}
                                 type="text"
-                                placeholder='Nome'
-                                className='border px-5 py-2 rounded-lg text-gray-900'
+                                placeholder={searchType === 'razao' ? 'Razão Social' : 'CNPJ'}
+                                className='border px-5 py-2 rounded-r-lg text-gray-900'
                             />
                             {inputValue && (
                                 <button onClick={clearSearch} className='absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700'>

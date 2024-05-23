@@ -21,6 +21,11 @@ class CertificadoPJService {
         return await response.json();
     }
 
+    async getByCnpjAndTipo(cnpj: string, tipo: string): Promise<CertificadoPJ> {
+        const response = await fetch(`${this.baseUrl}/find-cnpj?cnpj=${cnpj}&tipoCertificado=${tipo}`);
+        return await response.json();
+    }
+
     async create(data: FormData): Promise<CertificadoPJ> {
         try {
             const response = await fetch(this.baseUrl, { method: 'POST', body: data });

@@ -16,7 +16,6 @@ export default function PessoaFisicaPage() {
     const [inputValue, setInputValue] = useState<string>('');
     const [searchType, setSearchType] = useState<'name' | 'cpf'>('name'); // Novo estado para tipo de busca
     const [open, setOpen] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
 
     async function loadCertificados(query: string = '', type: 'name' | 'cpf' = 'name') {
         setLoading(true);
@@ -30,9 +29,8 @@ export default function PessoaFisicaPage() {
         } else {
             const result = await useService.getByCpf(query);
             data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
+            console.log(data[0].cpf)
         }
-
-        console.log('Certificados carregados:', data);
 
         setCertificados(data);
         setLoading(false);
@@ -55,6 +53,7 @@ export default function PessoaFisicaPage() {
         }
 
         setInputValue(value);
+        console.log('CPF:' + value);
     };
 
     const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -64,10 +63,11 @@ export default function PessoaFisicaPage() {
 
     const handleSearch = () => {
         if (searchType === 'cpf' && inputValue.replace(/\D/g, '').length !== 11) {
-            toast.warn('Por favor, insira um CPF completo.');
+            toast.warn('Por favor, insira um CPF válido.');
             return;
         }
         setSearch(inputValue);
+        console.log('CPF:' + inputValue);
         loadCertificados(inputValue, searchType);
     };
 

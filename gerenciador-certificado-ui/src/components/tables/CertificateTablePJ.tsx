@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { CertificadoPJ } from '@/resources/certificado-pj/certificado-pj.resources';
 import { useCertificadoPJService } from '@/resources/certificado-pj/certificado-pj.service';
 import { Button } from '../button/Button'
+import { toast } from 'react-toastify';
 
 interface CertificateTablePJProps {
     certificadoPJ: CertificadoPJ[];
@@ -19,9 +20,15 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ certific
     }, [certificadoPJ]);
 
     async function handleDelete(uuid: string) {
-        await service.delete(uuid);
-        setCertificados(certificados.filter(cert => cert.uuid !== uuid));
-        setConfirmDelete({ show: false, uuid: null });
+        try {
+            await service.delete(uuid);
+            setCertificados(certificados.filter(cert => cert.uuid !== uuid));
+            toast.success('Certificado excluído com sucesso!');
+        } catch (error) {
+            toast.error('Erro ao excluir o certificado. Tente novamente.');
+        } finally {
+            setConfirmDelete({ show: false, uuid: null });
+        }
     }
 
     const openConfirmDelete = (uuid: string) => {
@@ -56,7 +63,7 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ certific
 
     return (
         <div className="overflow-x-auto">
-            {certificados.length === 0 ? (
+            {certificados.length === 0 || !certificados[0].razaoSocial ? (
                 <div className="text-center py-4">
                     <p className="text-gray-500">Nenhum certificado encontrado.</p>
                 </div>

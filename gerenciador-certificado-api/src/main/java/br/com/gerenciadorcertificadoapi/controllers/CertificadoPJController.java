@@ -43,12 +43,9 @@ public class CertificadoPJController {
     @GetMapping("/find-cnpj")
     @ResponseStatus(code = HttpStatus.OK)
     public CertificadoPJVO getByCnpj(@RequestParam("cnpj") String cnpj, @RequestParam("tipoCertificado") String tipoCertificado) {
-        if (cnpj.length() != 14) {
+        if (cnpj.length() != 18) {
             throw new IllegalArgumentException("CNPJ inválido: " + cnpj);
         }
-        // Formatar o CNPJ no estilo xx.xxx.xxx/xxxx-xx
-        cnpj = String.format("%s.%s.%s/%s-%s", cnpj.substring(0, 2), cnpj.substring(2, 5),
-                cnpj.substring(5, 8), cnpj.substring(8, 12), cnpj.substring(12));
         return service.findByCnpj(cnpj, TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
     }
 
