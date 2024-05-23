@@ -43,6 +43,7 @@ export const CertificateTablePF: React.FC<CertificateTablePFProps> = ({ certific
         if (!Array.isArray(certificados)) {
             return null;
         }
+
         return certificados.map((props) => (
             <tr key={props.uuid}>
                 <td className="px-6 py-4 whitespace-nowrap">{props.nome}</td>
@@ -63,7 +64,7 @@ export const CertificateTablePF: React.FC<CertificateTablePFProps> = ({ certific
 
     return (
         <div className="overflow-x-auto">
-            {certificados.length === 0 ? (
+            {certificados.length === 0 || !certificados[0].nome ? (
                 <div className="text-center py-4">
                     <p className="text-gray-500">Nenhum certificado encontrado.</p>
                 </div>

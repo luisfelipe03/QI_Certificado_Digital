@@ -16,6 +16,7 @@ export default function PessoaFisicaPage() {
     const [inputValue, setInputValue] = useState<string>('');
     const [searchType, setSearchType] = useState<'name' | 'cpf'>('name'); // Novo estado para tipo de busca
     const [open, setOpen] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
 
     async function loadCertificados(query: string = '', type: 'name' | 'cpf' = 'name') {
         setLoading(true);
@@ -30,11 +31,12 @@ export default function PessoaFisicaPage() {
             const result = await useService.getByCpf(query);
             data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
         }
-    
+
+        console.log('Certificados carregados:', data);
+
         setCertificados(data);
         setLoading(false);
     };
-    
 
     useEffect(() => {
         loadCertificados(search, searchType);
@@ -67,7 +69,6 @@ export default function PessoaFisicaPage() {
         }
         setSearch(inputValue);
         loadCertificados(inputValue, searchType);
-        console.log(certificados);
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
