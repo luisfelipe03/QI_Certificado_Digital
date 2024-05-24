@@ -1,7 +1,7 @@
 'use client'
 
-import { Template, CertificateTablePF, InputPFModal } from '@/components';
-import { CertificadoPF } from '@/resources/certificado-pf/certificado-pf.resources';
+import { Template, CertificateTablePF, InputPFModal, PaginacaoPF } from '@/components';
+import { CertificadoPF, CertificadoPFResponse } from '@/resources/certificado-pf/certificado-pf.resources'; // Importando CertificadoPFResponse
 import { useCertificadoPFService } from '@/resources/certificado-pf/certificado-pf.service';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -14,22 +14,27 @@ export default function PessoaFisicaPage() {
     const [loading, setLoading] = useState<boolean>(false);
     const [search, setSearch] = useState<string>('');
     const [inputValue, setInputValue] = useState<string>('');
-    const [searchType, setSearchType] = useState<'name' | 'cpf'>('name'); // Novo estado para tipo de busca
+    const [searchType, setSearchType] = useState<'name' | 'cpf'>('name');
     const [open, setOpen] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(0); // Inicializando page com 0
+    const [limit, setLimit] = useState<number>(3); // Inicializando limit com 10
+    const [paginas, setPaginas] = useState<number>(0); 
+    const [total, setTotal] = useState<number>(0);
 
     async function loadCertificados(query: string = '', type: 'name' | 'cpf' = 'name') {
         setLoading(true);
-        let data: CertificadoPF[]; // Definir data como um array de CertificadoPF
-    
+        let data: CertificadoPF[];
+
         if (query === '') {
-            data = await useService.getAll();
+            const response: CertificadoPFResponse = await useService.getAll(page, limit); // Recebendo a resposta paginada
+            data = response.data;
+            setTotal(response.total);
         } else if (type === 'name') {
             const result = await useService.getByName(query);
-            data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
+            data = Array.isArray(result) ? result : [result];
         } else {
             const result = await useService.getByCpf(query);
-            data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
-            console.log(data[0].cpf)
+            data = Array.isArray(result) ? result : [result];
         }
 
         setCertificados(data);
@@ -38,7 +43,7 @@ export default function PessoaFisicaPage() {
 
     useEffect(() => {
         loadCertificados(search, searchType);
-    }, []);
+    }, [page, limit]); // Adicionando page e limit como dependências do useEffect
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value;
@@ -53,7 +58,6 @@ export default function PessoaFisicaPage() {
         }
 
         setInputValue(value);
-        console.log('CPF:' + value);
     };
 
     const handleSearchTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -67,7 +71,6 @@ export default function PessoaFisicaPage() {
             return;
         }
         setSearch(inputValue);
-        console.log('CPF:' + inputValue);
         loadCertificados(inputValue, searchType);
     };
 
@@ -101,6 +104,26 @@ export default function PessoaFisicaPage() {
                     <div className='flex'>
                         <h1 className="text-left text-2xl font-semibold text-gray-800">Certificados Pessoa Física</h1>
                     </div>
+                </section>
+
+                {/* Campo de seleção de itens por página e barra de pesquisa */}
+                <div className='flex items-center justify-between space-x-4 mb-4'>
+                    {/* Campo de seleção de itens por página */}
+                    <div className='flex items-center'>
+                        <label className="text-gray-700 mr-2">Itens por página:</label>
+                        <select 
+                            value={limit}
+                            onChange={(e) => setLimit(parseInt(e.target.value))}
+                            className='border px-4 py-2 rounded-lg text-gray-900'
+                        >
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={30}>30</option>
+                        </select>
+                    </div>
+
+                    <div className='flex-grow'></div>
+
                     <div className='flex space-x-4 items-center'>
                         <div className='relative'>
                             <select 
@@ -131,11 +154,21 @@ export default function PessoaFisicaPage() {
                         <button className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600' onClick={() => setOpen(true)}>Adicionar</button>
                         <InputPFModal open={open} setOpen={setOpen} />
                     </div>
-                </section>
+                </div>
 
                 <ul>
                     <CertificateTablePF certificadoPF={certificados} />
                 </ul>
+
+                <div>
+                    <PaginacaoPF 
+                        paginaAtual={page} 
+                        qtdItensPorPagina={limit} 
+                        totalPaginas={Math.ceil(total / limit)}
+                        onChangePage={(page) => setPage(page)}
+                    />
+                </div>                
+
             </div>
         </Template>
     );

@@ -1,6 +1,7 @@
 package br.com.gerenciadorcertificadoapi.controllers;
 
 import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPFVO;
+import br.com.gerenciadorcertificadoapi.data.vo.PaginatedResponse;
 import br.com.gerenciadorcertificadoapi.services.CertificadoPFService;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,12 @@ public class CertificadoPFController {
 
     @GetMapping("/validos")
     @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
-    public List<CertificadoPFVO> findAll(@RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                         @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
-        return service.findAllPaginado(page, limit);
+    public PaginatedResponse<CertificadoPFVO> findAll(
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
+        List<CertificadoPFVO> certificados = service.findAllPaginado(page, limit);
+        long total = service.countAll(); // Método no serviço que retorna o total de registros
+        return new PaginatedResponse<>(certificados, total);
     }
 
     @GetMapping("/vencidos")

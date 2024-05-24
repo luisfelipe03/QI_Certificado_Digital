@@ -1,11 +1,23 @@
-import { CertificadoPF } from './certificado-pf.resources';
+import { CertificadoPF, CertificadoPFResponse } from './certificado-pf.resources';
 
 class CertificadoPFService {
     baseUrl: string = 'http://localhost:8080/api/certificado-pf';
 
-    async getAll() : Promise<CertificadoPF[]> {
-        const response = await fetch(this.baseUrl + '/validos');
-        return await response.json();
+    async getAll(page: number = 0, limit: number = 10) : Promise<CertificadoPFResponse> {
+        const response = await fetch(`${this.baseUrl}/validos?page=${page}&limit=${limit}`);
+        const data = await response.json();
+        return {
+            data: data.data.map((item: any) => ({
+                uuid: item.uuid,
+                nome: item.nome,
+                cpf: item.cpf,
+                dataEmissao: item.dataEmissao,
+                dataVencimento: item.dataVencimento,
+                tipoCertificado: item.tipoCertificado,
+                valido: item.valido
+            })),
+            total: data.total
+        };
     }
 
     async getByName(name: string = "") : Promise<CertificadoPF[]> {
