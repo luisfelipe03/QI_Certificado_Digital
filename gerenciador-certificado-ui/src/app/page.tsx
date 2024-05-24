@@ -19,7 +19,7 @@ const CardLink: React.FC<CardLinkProps> = ({ href, title, Icon }) => (
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-indigo-950 text-white py-3">
+      <header className="bg-blue-950 text-white py-3">
         <div className="container mx-auto flex justify-between items-center px-4">
           <Link href="/" passHref>
             <h1 className="text-3xl font-bold cursor-pointer">QI Assessoria</h1>
@@ -39,7 +39,7 @@ export default function Home() {
           <CardLink href="/SIMPLES" title="Simples Nacional" Icon={HomeIcon} />
         </div>
       </main>
-      <footer className="bg-indigo-950 text-white py-4">
+      <footer className="bg-blue-950 text-white py-4">
         <div className="container mx-auto text-center">
           <a href="https://github.com/luisfelipe03" target="_blank" rel="noopener noreferrer">
             Desenvolvido por Luis Felipe

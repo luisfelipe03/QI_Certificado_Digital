@@ -31,15 +31,7 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
     public List<CertificadoPJVO> findAll(TipoCertificado tipoCertificado) {
         logger.info("Listando todos os certificados PJ.");
         List<CertificadoPJ> pj = repository.findAllValidOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado);
-        List<CertificadoPJ> obj = new ArrayList<>();
-        for(CertificadoPJ certificado : pj) {
-            certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
-            repository.save(certificado);
-            if(certificado.isValido()) {
-                obj.add(certificado);
-            }
-        }
-        return ModelMapper.parseListObjects(obj, CertificadoPJVO.class);
+        return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
     }
 
     @Override
@@ -47,34 +39,18 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
         logger.info("Listando todos os certificados PJ.");
         List<CertificadoPJ> pj = repository.findAllValidOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado,
                 PageRequest.of(page, itens));
-        List<CertificadoPJ> obj = new ArrayList<>();
-        for(CertificadoPJ certificado : pj) {
-            certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
-            repository.save(certificado);
-            if(certificado.isValido()) {
-                obj.add(certificado);
-            }
-        }
-        return ModelMapper.parseListObjects(obj, CertificadoPJVO.class);
+        return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
     }
 
     public long countAll() {
-        return repository.count();
+        return repository.countByValidoTrue();
     }
 
     @Override
     public List<CertificadoPJVO> findAllExpired(TipoCertificado tipoCertificado) {
         logger.info("Listando todos os certificados PJ vencidos.");
         List<CertificadoPJ> pj = repository.findAllExpiredOrderByDataVencimentoDescAndTipoCertificado(tipoCertificado);
-        List<CertificadoPJ> obj = new ArrayList<>();
-        for(CertificadoPJ certificado : pj) {
-            certificado.setValido(CertificadoUtils.isValidoPJ(certificado));
-            repository.save(certificado);
-            if(!certificado.isValido()) {
-                obj.add(certificado);
-            }
-        }
-        return ModelMapper.parseListObjects(obj, CertificadoPJVO.class);
+        return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
     }
 
     @Override

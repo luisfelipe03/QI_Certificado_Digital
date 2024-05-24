@@ -27,50 +27,26 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     @Override
     public List<CertificadoPFVO> findAll() {
         logger.info("Listando todos os certificados PF.");
-        List<CertificadoPF> PF =  repository.findAllOrderByDataVencimentoAsc();
-        List<CertificadoPF> obj = new ArrayList<>();
-        for(CertificadoPF certificado : PF) {
-            certificado.setValido(CertificadoUtils.isValidoPF(certificado));
-            repository.save(certificado);
-            if(certificado.isValido()) {
-                obj.add(certificado);
-            }
-        }
-        return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
+        List<CertificadoPF> pf =  repository.findAllOrderByDataVencimentoAsc();
+        return ModelMapper.parseListObjects(pf, CertificadoPFVO.class);
     }
 
     @Override
     public List<CertificadoPFVO> findAllPaginado(int page, int itens) {
         logger.info("Listando todos os certificados PF.");
-        List<CertificadoPF> PF =  repository.findAllOrderByDataVencimentoAsc(PageRequest.of(page, itens));
-        List<CertificadoPF> obj = new ArrayList<>();
-        for(CertificadoPF certificado : PF) {
-            certificado.setValido(CertificadoUtils.isValidoPF(certificado));
-            repository.save(certificado);
-            if(certificado.isValido()) {
-                obj.add(certificado);
-            }
-        }
-        return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
+        List<CertificadoPF> pf =  repository.findAllOrderByDataVencimentoAsc(PageRequest.of(page, itens));
+        return ModelMapper.parseListObjects(pf, CertificadoPFVO.class);
     }
 
     public long countAll() {
-        return repository.count();
+        return repository.countByValidoTrue();
     }
 
     @Override
     public List<CertificadoPFVO> findAllExpired() {
         logger.info("Listando todos os certificados PF vencido.");
-        List<CertificadoPF> PF = repository.findAllOrderByDataVencimentoDesc();
-        List<CertificadoPF> obj = new ArrayList<>();
-        for(CertificadoPF certificado : PF) {
-            certificado.setValido(CertificadoUtils.isValidoPF(certificado));
-            repository.save(certificado);
-            if(!certificado.isValido()) {
-                obj.add(certificado);
-            }
-        }
-        return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
+        List<CertificadoPF> pf = repository.findAllExpiredOrderByDataVencimentoDesc();
+        return ModelMapper.parseListObjects(pf, CertificadoPFVO.class);
     }
 
     @Override
@@ -111,17 +87,9 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     @Override
     public List<CertificadoPFVO> findByNome(String nome) {
         List<CertificadoPF> certificados = repository.findByNomeContainingOrderByDataVencimentoAsc(nome);
-        List<CertificadoPF> obj = new ArrayList<>();
-        for(CertificadoPF certificado : certificados) {
-            certificado.setValido(CertificadoUtils.isValidoPF(certificado));
-            repository.save(certificado);
-            if(certificado.isValido()) {
-                obj.add(certificado);
-            }
-        }
         if (certificados.isEmpty()) {
             throw new ResourceNotFoundException("Não existe certificado cadastrado com nome: " + nome);
         }
-        return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
+        return ModelMapper.parseListObjects(certificados, CertificadoPFVO.class);
     }
 }

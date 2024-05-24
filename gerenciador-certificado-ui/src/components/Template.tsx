@@ -49,7 +49,7 @@ export const RenderIf: React.FC<RenderIfProps> = ({condition = true, children}) 
 
 const Header: React.FC = () => {
     return (
-        <header className="bg-indigo-950 text-white py-3" >
+        <header className="bg-blue-950 text-white py-3" >
             <div className="container mx-auto flex justofy-between items-center px-4">
                 <Link href="/" passHref>
                     <h1 className="text-3xl font-bold">QI Assessoria</h1>
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
 
 const Footer: React.FC = () => {
     return (
-        <footer className="bg-indigo-950 text-white py-4 mt-8 fixed bottom-0 w-full" >
+        <footer className="bg-blue-950 text-white py-4 mt-8 fixed bottom-0 w-full" >
             <div className="container mx-auto text-center">
                 <a href="https://github.com/luisfelipe03" target="_blank">Desenvolvido por Luis Felipe</a>
             </div>
