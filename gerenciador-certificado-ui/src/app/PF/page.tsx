@@ -17,9 +17,10 @@ export default function PessoaFisicaPage() {
     const [searchType, setSearchType] = useState<'name' | 'cpf'>('name');
     const [open, setOpen] = useState<boolean>(false);
     const [page, setPage] = useState<number>(0); // Inicializando page com 0
-    const [limit, setLimit] = useState<number>(3); // Inicializando limit com 10
+    const [limit, setLimit] = useState<number>(10); // Inicializando limit com 10
     const [paginas, setPaginas] = useState<number>(0); 
     const [total, setTotal] = useState<number>(0);
+    const [paginacao, setPaginacao] = useState<boolean>(true);
 
     async function loadCertificados(query: string = '', type: 'name' | 'cpf' = 'name') {
         setLoading(true);
@@ -29,12 +30,15 @@ export default function PessoaFisicaPage() {
             const response: CertificadoPFResponse = await useService.getAll(page, limit); // Recebendo a resposta paginada
             data = response.data;
             setTotal(response.total);
+            setPaginacao(true);
         } else if (type === 'name') {
             const result = await useService.getByName(query);
             data = Array.isArray(result) ? result : [result];
+            setPaginacao(false);
         } else {
             const result = await useService.getByCpf(query);
             data = Array.isArray(result) ? result : [result];
+            setPaginacao(false);
         }
 
         setCertificados(data);
@@ -72,6 +76,7 @@ export default function PessoaFisicaPage() {
         }
         setSearch(inputValue);
         loadCertificados(inputValue, searchType);
+
     };
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -161,12 +166,13 @@ export default function PessoaFisicaPage() {
                 </ul>
 
                 <div>
-                    <PaginacaoPF 
-                        paginaAtual={page} 
-                        qtdItensPorPagina={limit} 
-                        totalPaginas={Math.ceil(total / limit)}
-                        onChangePage={(page) => setPage(page)}
-                    />
+                    {paginacao && (
+                        <PaginacaoPF 
+                            paginaAtual={page} 
+                            totalPaginas={Math.ceil(total / limit)}
+                            onChangePage={(page) => setPage(page)}
+                        />
+                    )}
                 </div>                
 
             </div>

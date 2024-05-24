@@ -1,6 +1,7 @@
 package br.com.gerenciadorcertificadoapi.controllers;
 
 import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPJVO;
+import br.com.gerenciadorcertificadoapi.data.vo.PaginatedResponse;
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
 import br.com.gerenciadorcertificadoapi.services.CertificadoPJService;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
@@ -24,10 +25,12 @@ public class CertificadoPJController {
 
     @GetMapping("/{tipoCertificado}/validos")
     @ResponseStatus(code = HttpStatus.OK)
-    public List<CertificadoPJVO> findAll(@PathVariable("tipoCertificado") String tipoCertificado,
-                                         @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-                                         @RequestParam(value = "limit", required = false, defaultValue = "3") int limit) {
-        return service.findAllPaginado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()), page, limit);
+    public PaginatedResponse<CertificadoPJVO> findAll(@PathVariable("tipoCertificado") String tipoCertificado,
+                                                      @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+                                                      @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
+        List<CertificadoPJVO> certificados = service.findAllPaginado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()), page, limit);
+        long total = service.countAll(); // Método no serviço que retorna o total de registros
+        return new PaginatedResponse<>(certificados, total);
     }
 
     @GetMapping("/{tipoCertificado}/vencidos")

@@ -8,9 +8,7 @@ import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
 import br.com.gerenciadorcertificadoapi.repositories.CertificadoPFRepository;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -54,12 +52,6 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
             }
         }
         return ModelMapper.parseListObjects(obj, CertificadoPFVO.class);
-    }
-
-    public List<CertificadoPFVO> findAllPaged(int page, int limit) {
-        Pageable pageable = PageRequest.of(page, limit);
-        Page<CertificadoPF> pagedResult = repository.findAll(pageable);
-        return ModelMapper.parseListObjects(pagedResult.getContent(), CertificadoPFVO.class);
     }
 
     public long countAll() {

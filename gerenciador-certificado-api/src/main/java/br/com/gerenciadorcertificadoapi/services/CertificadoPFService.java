@@ -15,6 +15,5 @@ public interface CertificadoPFService {
     void delete(String uuid);
     CertificadoPFVO findByCpf(String cpf);
     List<CertificadoPFVO> findByNome(String nome);
-    List<CertificadoPFVO> findAllPaged(int page, int limit);
     long countAll();
 }

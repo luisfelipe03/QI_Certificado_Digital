@@ -58,6 +58,10 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
         return ModelMapper.parseListObjects(obj, CertificadoPJVO.class);
     }
 
+    public long countAll() {
+        return repository.count();
+    }
+
     @Override
     public List<CertificadoPJVO> findAllExpired(TipoCertificado tipoCertificado) {
         logger.info("Listando todos os certificados PJ vencidos.");

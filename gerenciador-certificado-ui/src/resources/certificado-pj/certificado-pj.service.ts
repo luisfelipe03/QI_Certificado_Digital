@@ -1,19 +1,23 @@
-import { CertificadoPJ } from './certificado-pj.resources';
+import { CertificadoPJ, CertificadoPJResponse } from './certificado-pj.resources';
 
 class CertificadoPJService {
     baseUrl: string = 'http://localhost:8080/api/certificado-pj';
 
-    async getAllByTipo(tipo: string): Promise<CertificadoPJ[]> {
-        try {
-            const response = await fetch(`${this.baseUrl}/${tipo}/validos`);
-            if (!response.ok) {
-                throw new Error('Erro ao buscar os certificados');
-            }
-            return await response.json();
-        } catch (error) {
-            console.error('Erro ao buscar os certificados:', error);
-            return [];
-        }
+    async getAllByTipo(tipo: String, page: number, limit: number): Promise<CertificadoPJResponse> {
+        const response = await fetch(`${this.baseUrl}/${tipo}/validos?page=${page}&limit=${limit}`);
+        const data = await response.json();
+        return {
+            data: data.data.map((item: any) => ({
+                uuid: item.uuid,
+                razaoSocial: item.razaoSocial,
+                cnpj: item.cnpj,
+                dataEmissao: item.dataEmissao,
+                dataVencimento: item.dataVencimento,
+                tipoCertificado: item.tipoCertificado,
+                valido: item.valido
+            })),
+            total: data.total
+        };
     }
 
     async getByRazaoAndTipo(query: string, tipo: string): Promise<CertificadoPJ[]> {

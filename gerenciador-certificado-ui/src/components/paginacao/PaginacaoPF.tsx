@@ -5,12 +5,9 @@ interface PaginacaoPFProps {
     paginaAtual: number;
     totalPaginas: number;
     onChangePage: (page: number) => void;
-    qtdItensPorPagina: number;
 }
 
-export const PaginacaoPF: React.FC<PaginacaoPFProps> = ({ paginaAtual, totalPaginas, onChangePage, qtdItensPorPagina }: PaginacaoPFProps) => {
-
-    // Array de páginas
+export const PaginacaoPF: React.FC<PaginacaoPFProps> = ({ paginaAtual, totalPaginas, onChangePage }: PaginacaoPFProps) => {
     const paginas = Array.from(Array(totalPaginas).keys());
 
     return (
