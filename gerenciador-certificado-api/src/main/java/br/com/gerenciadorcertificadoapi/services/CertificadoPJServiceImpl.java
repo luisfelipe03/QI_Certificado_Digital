@@ -42,8 +42,8 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
         return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
     }
 
-    public long countAll() {
-        return repository.countByValidoTrue();
+    public long countAllByTipo(TipoCertificado tipoCertificado) {
+        return repository.countByValidoTrue(tipoCertificado);
     }
 
     @Override

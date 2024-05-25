@@ -31,16 +31,16 @@ class CertificadoPJService {
     }
 
     async create(data: FormData): Promise<CertificadoPJ> {
-        try {
-            const response = await fetch(this.baseUrl, { method: 'POST', body: data });
-            if (!response.ok) {
-                throw new Error('Erro ao criar o certificado');
-            }
-            return await response.json();
-        } catch (error) {
-            console.error('Erro ao criar o certificado:', error);
-            return {} as CertificadoPJ;
+        const response = await fetch(`${this.baseUrl}/upload`, {
+            method: 'POST',
+            body: data
+        });
+        if (!response.ok) {
+            // Se a resposta não for bem-sucedida, lança um erro com a mensagem do corpo da resposta
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
         }
+        return await response.json();
     }
 
     async delete(uuid: string): Promise<void> {

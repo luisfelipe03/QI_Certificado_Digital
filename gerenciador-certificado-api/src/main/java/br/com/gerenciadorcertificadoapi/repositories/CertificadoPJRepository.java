@@ -31,8 +31,8 @@ public interface CertificadoPJRepository extends JpaRepository<CertificadoPJ, St
     @Query("SELECT c FROM CertificadoPJ c WHERE c.tipoCertificado = :tipo AND c.isValido = false ORDER BY c.dataVencimento DESC")
     List<CertificadoPJ> findAllExpiredOrderByDataVencimentoDescAndTipoCertificado(@Param("tipo") TipoCertificado tipo);
 
-    @Query("SELECT COUNT(c) FROM CertificadoPJ c where c.isValido = true")
-    long countByValidoTrue();
+    @Query("SELECT COUNT(c) FROM CertificadoPJ c where c.isValido = true AND c.tipoCertificado = :tipo")
+    long countByValidoTrue(@Param("tipo") TipoCertificado tipo);
 
 
 }

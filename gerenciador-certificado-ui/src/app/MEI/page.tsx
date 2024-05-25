@@ -1,13 +1,13 @@
 'use client'
 
-import { Template, CertificateTablePJ, InputPJModal } from '@/components'
+import { Template, CertificateTablePJ, InputPJModal, PaginacaoPJ } from '@/components'
 import { CertificadoPJ } from '@/resources/certificado-pj/certificado-pj.resources'
 import { useCertificadoPJService } from '@/resources/certificado-pj/certificado-pj.service'
 import { useState, useEffect } from 'react' 
 import { toast } from 'react-toastify';
 import Link from 'next/link'
 
-export default function LucroPresumidoPage() {
+export default function MeiPage() {
   
     const useService = useCertificadoPJService();
     const [certificados, setCertificados] = useState<CertificadoPJ[]>([]);
@@ -16,19 +16,28 @@ export default function LucroPresumidoPage() {
     const [searchType, setSearchType] = useState<'razao' | 'cnpj'>('razao');
     const [inputValue, setInputValue] = useState<string>('');
     const [open, setOpen] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(0); // Inicializando page com 0
+    const [limit, setLimit] = useState<number>(10); // Inicializando limit com 10
+    const [total, setTotal] = useState<number>(0);
+    const [paginacao, setPaginacao] = useState<boolean>(true);
 
     async function loadCertificados(query: string = '', type: 'razao' | 'cnpj' = 'razao') {
         setLoading(true);
         let data: CertificadoPJ[];
 
         if (query === '') {
-            data = await useService.getAllByTipo('MEI');
+            const result = await useService.getAllByTipo('MEI', page, limit);
+            data = result.data;
+            setTotal(result.total);
+            setPaginacao(true);
         } else if (type === 'razao') {
             const result = await useService.getByRazaoAndTipo(query, 'MEI');
             data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
+            setPaginacao(false);
         } else {
             const result = await useService.getByCnpjAndTipo(query, 'MEI');
             data = Array.isArray(result) ? result : [result]; // Certificar-se de que data é sempre um array
+            setPaginacao(false);
         }
 
         setCertificados(data);
@@ -37,7 +46,7 @@ export default function LucroPresumidoPage() {
 
     useEffect(() => {
         loadCertificados(search, searchType);
-    }, []);
+    }, [page, limit]);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         let value = e.target.value;
@@ -84,8 +93,12 @@ export default function LucroPresumidoPage() {
         loadCertificados('');
     };
 
+    const handleAddCertificate = () => {
+        loadCertificados(search, searchType);
+    };
+
     return (
-        <Template footerModel={2} loading={loading}>
+        <Template loading={loading}>
             <div className='flex items-center justify-start mb-4'>
                 <Link href="/" passHref>
                     <div className='text-blue-500 hover:underline flex items-center'>
@@ -102,6 +115,22 @@ export default function LucroPresumidoPage() {
                     <div className='flex'>
                         <h1 className="text-left text-2xl font-semibold text-gray-800">Certificados MEI</h1>
                     </div>
+                </section>
+
+                <div className='flex items-center justify-between space-x-4 mb-4'>
+                    <div className='flex items-center'>
+                        <label className="text-gray-700 mr-2">Itens por página:</label>
+                        <select 
+                            value={limit}
+                            onChange={(e) => setLimit(parseInt(e.target.value))}
+                            className='border px-4 py-2 rounded-lg text-gray-900'
+                        >
+                            <option value={10}>10</option>
+                            <option value={20}>20</option>
+                            <option value={30}>30</option>
+                        </select>
+                    </div>
+                    <div className='flex-grow'></div>
                     <div className='flex space-x-4 items-center'>
                         <div className='relative'>
                         <select 
@@ -130,15 +159,27 @@ export default function LucroPresumidoPage() {
                         </div>
                         <button className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600' onClick={handleSearch}>Buscar</button>
                         <button className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600' onClick={() => setOpen(true)}>Adicionar</button>
-                        <InputPJModal open={open} setOpen={setOpen} />
+                        <InputPJModal open={open} setOpen={setOpen} onAddCertificate={handleAddCertificate} tipoCertificado='MEI'/>
                     </div>
-                </section>
+                </div>
 
                 <ul>
                     <CertificateTablePJ certificadoPJ={certificados} />
                 </ul>
+                                
+                <div className='mt-5'></div>                
+                <div>
+                    {paginacao && (
+                        <PaginacaoPJ 
+                            paginaAtual={page}
+                            totalPaginas={Math.ceil(total / limit)}
+                            onChangePage={(page) => setPage(page)}
+                        />
+                    )}
+                </div>
             </div>
         </Template>
-    )
+    );
+    
 
 }

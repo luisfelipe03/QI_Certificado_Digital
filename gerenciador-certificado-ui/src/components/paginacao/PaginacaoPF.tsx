@@ -11,7 +11,7 @@ export const PaginacaoPF: React.FC<PaginacaoPFProps> = ({ paginaAtual, totalPagi
     const paginas = Array.from(Array(totalPaginas).keys());
 
     return (
-        <div className="flex justify-center items-center mt-4 mb-5">
+        <div className="flex justify-center items-center mt-5 mb-5">
             <button className={`px-4 py-2 rounded-lg ${paginaAtual === 0 ? 'bg-gray-300' : 'bg-blue-500 text-white'}`} onClick={() => onChangePage(paginaAtual - 1)} disabled={paginaAtual === 0}>Anterior</button>
             <div className="mx-4">
                 {paginas.map((page) => (

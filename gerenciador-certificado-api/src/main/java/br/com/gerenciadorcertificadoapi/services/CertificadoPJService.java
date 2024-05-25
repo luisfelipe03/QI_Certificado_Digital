@@ -16,6 +16,6 @@ public interface CertificadoPJService {
     void delete(String uuid);
     CertificadoPJVO findByCnpj(String cnpj, TipoCertificado tipo);
     List<CertificadoPJVO> findByRazaoSocial(String razaoSocial, TipoCertificado tipo);
-    long countAll();
+    long countAllByTipo(TipoCertificado tipoCertificado);
 
 }

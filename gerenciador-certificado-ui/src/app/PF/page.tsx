@@ -13,8 +13,8 @@ export default function PessoaFisicaPage() {
     const [certificados, setCertificados] = useState<CertificadoPF[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [search, setSearch] = useState<string>('');
-    const [inputValue, setInputValue] = useState<string>('');
     const [searchType, setSearchType] = useState<'name' | 'cpf'>('name');
+    const [inputValue, setInputValue] = useState<string>('');
     const [open, setOpen] = useState<boolean>(false);
     const [page, setPage] = useState<number>(0); // Inicializando page com 0
     const [limit, setLimit] = useState<number>(10); // Inicializando limit com 10
@@ -167,6 +167,8 @@ export default function PessoaFisicaPage() {
                 <ul>
                     <CertificateTablePF certificadoPF={certificados} />
                 </ul>
+
+                <div className='mt-5'></div>
 
                 <div>
                     {paginacao && (

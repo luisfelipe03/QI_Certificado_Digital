@@ -7,7 +7,7 @@ import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify';
 import Link from 'next/link'
 
-export default function LucroPresumidoPage() {
+export default function LucroRealPage() {
   
     const useService = useCertificadoPJService();
     const [certificados, setCertificados] = useState<CertificadoPJ[]>([]);
@@ -93,8 +93,12 @@ export default function LucroPresumidoPage() {
         loadCertificados('');
     };
 
+    const handleAddCertificate = () => {
+        loadCertificados(search, searchType);
+    };
+
     return (
-        <Template footerModel={2} loading={loading}>
+        <Template loading={loading}>
             <div className='flex items-center justify-start mb-4'>
                 <Link href="/" passHref>
                     <div className='text-blue-500 hover:underline flex items-center'>
@@ -155,14 +159,15 @@ export default function LucroPresumidoPage() {
                         </div>
                         <button className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600' onClick={handleSearch}>Buscar</button>
                         <button className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600' onClick={() => setOpen(true)}>Adicionar</button>
-                        <InputPJModal open={open} setOpen={setOpen} />
+                        <InputPJModal open={open} setOpen={setOpen} onAddCertificate={handleAddCertificate} tipoCertificado='LR'/>
                     </div>
                 </div>
 
                 <ul>
                     <CertificateTablePJ certificadoPJ={certificados} />
                 </ul>
-    
+                                
+                <div className='mt-5'></div>                
                 <div>
                     {paginacao && (
                         <PaginacaoPJ 

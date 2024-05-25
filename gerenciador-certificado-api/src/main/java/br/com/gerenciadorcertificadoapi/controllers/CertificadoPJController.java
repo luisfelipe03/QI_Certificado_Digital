@@ -29,7 +29,7 @@ public class CertificadoPJController {
                                                       @RequestParam(value = "page", required = false, defaultValue = "0") int page,
                                                       @RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
         List<CertificadoPJVO> certificados = service.findAllPaginado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()), page, limit);
-        long total = service.countAll(); // Método no serviço que retorna o total de registros
+        long total = service.countAllByTipo(TipoCertificado.valueOf(tipoCertificado.toUpperCase())); // Método no serviço que retorna o total de registros
         return new PaginatedResponse<>(certificados, total);
     }
 
