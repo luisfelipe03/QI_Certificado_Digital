@@ -18,7 +18,6 @@ export default function PessoaFisicaPage() {
     const [open, setOpen] = useState<boolean>(false);
     const [page, setPage] = useState<number>(0); // Inicializando page com 0
     const [limit, setLimit] = useState<number>(10); // Inicializando limit com 10
-    const [paginas, setPaginas] = useState<number>(0); 
     const [total, setTotal] = useState<number>(0);
     const [paginacao, setPaginacao] = useState<boolean>(true);
 
@@ -91,8 +90,12 @@ export default function PessoaFisicaPage() {
         loadCertificados('');
     };
 
+    const handleAddCertificate = () => {
+        loadCertificados(search, searchType);
+    };
+
     return (
-        <Template footerModel={2} loading={loading}>
+        <Template loading={loading}>
             <div className='flex items-center justify-start mb-4'>
                 <Link href="/" passHref>
                     <div className='text-blue-500 hover:underline flex items-center'>
@@ -157,7 +160,7 @@ export default function PessoaFisicaPage() {
                         </div>
                         <button className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600' onClick={handleSearch}>Buscar</button>
                         <button className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600' onClick={() => setOpen(true)}>Adicionar</button>
-                        <InputPFModal open={open} setOpen={setOpen} />
+                        <InputPFModal open={open} setOpen={setOpen} onAddCertificate={handleAddCertificate} />
                     </div>
                 </div>
 

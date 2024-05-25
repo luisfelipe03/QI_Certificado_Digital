@@ -4,11 +4,10 @@ import Link from 'next/link';
 interface TemplateProps {
     children: React.ReactNode;
     loading?: boolean;
-    footerModel: number;
 }
 
 
-export const Template: React.FC<TemplateProps> = ({ children, loading, footerModel = 1 }) => {
+export const Template: React.FC<TemplateProps> = ({ children, loading}) => {
     return (
         <>
             <Header />

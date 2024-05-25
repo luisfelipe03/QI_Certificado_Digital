@@ -30,13 +30,22 @@ class CertificadoPFService {
         return await response.json();
     }
 
-    async create(data: FormData) : Promise<CertificadoPF> {
-        const response = await fetch(this.baseUrl, {
+    async create(data: FormData): Promise<CertificadoPF> {
+        const response = await fetch(`${this.baseUrl}/upload`, {
             method: 'POST',
             body: data
         });
+
+        if (!response.ok) {
+            // Se a resposta não for bem-sucedida, lança um erro com a mensagem do corpo da resposta
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+        }
+
         return await response.json();
-    }
+    
+}
+
 
     async delete(uuid: string) : Promise<void> {
         await fetch(`${this.baseUrl}/${uuid}`, {

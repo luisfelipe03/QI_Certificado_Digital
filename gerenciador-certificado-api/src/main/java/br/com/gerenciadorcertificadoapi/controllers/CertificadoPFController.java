@@ -64,7 +64,7 @@ public class CertificadoPFController {
         try {
             // Verificar se o arquivo é nulo ou vazio
             if (arquivoPfx == null || arquivoPfx.isEmpty()) {
-                return ResponseEntity.badRequest().body("O arquivo não foi enviado.");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("O arquivo não foi enviado.");
             }
 
             // Carregar o certificado digital a partir do arquivo PFX
