@@ -39,13 +39,11 @@ export default function Home() {
           <CardLink href="/SIMPLES" title="Simples Nacional" Icon={HomeIcon} />
         </div>
       </main>
-      <footer className="bg-blue-950 text-white py-4">
-        <div className="container mx-auto text-center">
-          <a href="https://github.com/luisfelipe03" target="_blank" rel="noopener noreferrer">
-            Desenvolvido por Luis Felipe
-          </a>
-        </div>
-      </footer>
+      <footer className="bg-blue-950 p-4 mt-8">
+            <div className="container mx-auto text-center text-white">
+                &copy; 2024 QI Assessoria. Todos os direitos reservados.
+            </div>
+        </footer>
     </div>
   );
 }
