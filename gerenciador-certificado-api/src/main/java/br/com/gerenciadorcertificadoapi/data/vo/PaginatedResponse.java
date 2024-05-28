@@ -1,31 +1,18 @@
 package br.com.gerenciadorcertificadoapi.data.vo;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class PaginatedResponse<T> {
     private List<T> data;
     private long total;
-
-    public PaginatedResponse(List<T> data, long total) {
-        this.data = data;
-        this.total = total;
-    }
-
-    // Getters and setters
-    public List<T> getData() {
-        return data;
-    }
-
-    public void setData(List<T> data) {
-        this.data = data;
-    }
-
-    public long getTotal() {
-        return total;
-    }
-
-    public void setTotal(long total) {
-        this.total = total;
-    }
 }
 

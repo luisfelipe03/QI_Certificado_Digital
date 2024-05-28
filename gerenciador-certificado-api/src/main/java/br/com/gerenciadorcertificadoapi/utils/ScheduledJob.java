@@ -15,6 +15,7 @@ public class ScheduledJob {
     @Autowired
     private CertificadoPJRepository pjRepository;
 
+    // Executa todo dia 00:05
     @Scheduled(cron = "0 5 0 * * ?", zone = "America/Recife")
     public void checkValidCertificates() {
         pfRepository.findAll().forEach(certificado -> {
