@@ -19,10 +19,12 @@ const CardLink: React.FC<CardLinkProps> = ({ href, title, Icon }) => (
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-950 text-white py-3">
+      <header className="bg-black text-white py-3">
         <div className="container mx-auto flex justify-between items-center px-4">
           <Link href="/" passHref>
-            <h1 className="text-3xl font-bold cursor-pointer">QI Assessoria</h1>
+            <div className='w-100 h-64'>
+              <img src="https://raw.githubusercontent.com/luisfelipe03/QI_Certificado_Digital/main/gerenciador-certificado-ui/src/app/logo%202.png?token=GHSAT0AAAAAACL43QNNYXWOKOEC6B5B4G3CZSV7ZPQ"/>
+            </div>
           </Link>
           <button className="flex items-center space-x-2 bg-red-500 px-4 py-2 rounded text-white hover:bg-red-600">
             <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />

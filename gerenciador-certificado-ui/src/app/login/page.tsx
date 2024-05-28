@@ -36,13 +36,11 @@ export default function LoginPage() {
         <div className="min-h-screen flex items-center justify-center bg-blue-qi">
                 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-2 lg:px-8">
                     <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-                        <img src="https://raw.githubusercontent.com/luisfelipe03/QI_Certificado_Digital/main/gerenciador-certificado-ui/src/app/logo.png?token=GHSAT0AAAAAACL43QNMBKOT3MYXBV6SG6T2ZSV7EPA" alt="Logo" className="mx-auto w-auto" />
-                        <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                            {newUserState ? 'Cadastro' : 'Login'}
-                        </h2>
+                        {/* <img src="https://raw.githubusercontent.com/luisfelipe03/QI_Certificado_Digital/main/gerenciador-certificado-ui/src/app/logo%203.png?token=GHSAT0AAAAAACL43QNMOYZX36OVD7MMV5XMZSV73JA" alt="Logo" className="mx-auto w-auto" /> */}
+                        <img src="https://raw.githubusercontent.com/luisfelipe03/QI_Certificado_Digital/main/gerenciador-certificado-ui/src/app/logo%202.png?token=GHSAT0AAAAAACL43QNNYXWOKOEC6B5B4G3CZSV7ZPQ" alt="Logo" className="mx-auto w-auto" />
                     </div>
 
-                    <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+                    <div className="sm:mx-auto sm:w-full sm:max-w-md">
                         <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
                             <RenderIf condition={!newUserState}>
                                 <form onSubmit={loginFormik.handleSubmit} className="space-y-6">
