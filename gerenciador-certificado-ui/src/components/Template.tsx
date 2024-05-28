@@ -1,5 +1,6 @@
 import { ToastContainer } from 'react-toastify'
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface TemplateProps {
     children: React.ReactNode;
@@ -51,29 +52,9 @@ const Header: React.FC = () => {
         <header className="bg-blue-950 text-white py-3" >
             <div className="container mx-auto flex justofy-between items-center px-4">
                 <Link href="/" passHref>
-                    <h1 className="text-3xl font-bold">QI Assessoria</h1>
+                    <Image src="/images/logo.png" alt="Logo" width={120} height={40} />
                 </Link>
             </div>
         </header>
-    );
-}
-
-const Footer: React.FC = () => {
-    return (
-        <footer className="bg-blue-950 text-white py-4 mt-8 fixed bottom-0 w-full" >
-            <div className="container mx-auto text-center">
-                <a href="https://github.com/luisfelipe03" target="_blank">Desenvolvido por Luis Felipe</a>
-            </div>
-        </footer>
-    );
-}
-
-const Footer2: React.FC = () => {
-    return (
-        <footer className="bg-indigo-950 text-white py-4 mt-8" >
-            <div className="container mx-auto text-center">
-                <a href="https://github.com/luisfelipe03" target="_blank">Desenvolvido por Luis Felipe</a>
-            </div>
-        </footer>
     );
 }

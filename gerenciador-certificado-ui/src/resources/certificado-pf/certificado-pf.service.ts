@@ -47,7 +47,7 @@ class CertificadoPFService {
 }
 
 
-    async delete(uuid: string) : Promise<void> {
+    async delete(uuid: string): Promise<void> {
         await fetch(`${this.baseUrl}/${uuid}`, {
             method: 'DELETE'
         });

@@ -17,7 +17,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/certificado-pj")
-@CrossOrigin(origins = "*")
 public class CertificadoPJController {
 
     @Autowired

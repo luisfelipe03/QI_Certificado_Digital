@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeftStartOnRectangleIcon, BuildingOfficeIcon, UserCircleIcon, BriefcaseIcon, ClipboardIcon, HomeIcon, ScaleIcon } from '@heroicons/react/24/solid';
+import Image from 'next/image';
+import { ToastContainer } from 'react-toastify';
 
 interface CardLinkProps {
   href: string;
@@ -22,9 +24,7 @@ export default function Home() {
       <header className="bg-blue-950 text-white py-3">
         <div className="container mx-auto flex justify-between items-center px-4">
           <Link href="/" passHref>
-            <div>
-              <img className='w-40 h-30' src="https://raw.githubusercontent.com/luisfelipe03/QI_Certificado_Digital/main/gerenciador-certificado-ui/src/app/logo.png?token=GHSAT0AAAAAACL43QNNW2IYDEYKS3XQCCL2ZSWAZFA"/>
-            </div>
+          <Image src="/images/logo.png" alt="Logo" width={120} height={40} />
           </Link>
           <button className="flex items-center space-x-2 bg-red-500 px-4 py-2 rounded text-white hover:bg-red-600">
             <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />
@@ -46,6 +46,13 @@ export default function Home() {
                 &copy; 2024 QI Assessoria. Todos os direitos reservados.
             </div>
         </footer>
+        <ToastContainer position='top-right'
+                            autoClose={8000}
+                            hideProgressBar={false}
+                            draggable={false}
+                            closeOnClick={true}
+                            pauseOnHover={true}
+            />
     </div>
   );
 }
