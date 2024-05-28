@@ -36,7 +36,7 @@ export default function LoginPage() {
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
                 <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-2 lg:px-8">
                     <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-                        <img src="" alt="Logo" className="mx-auto h-12 w-auto" />
+                        <img src="https://raw.githubusercontent.com/luisfelipe03/QI_Certificado_Digital/main/gerenciador-certificado-ui/src/app/logo.png?token=GHSAT0AAAAAACL43QNNMWFEKXMDXKNNQFXKZSV7CDQ" alt="Logo" className="mx-auto w-auto" />
                         <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
                             {newUserState ? 'Cadastro' : 'Login'}
                         </h2>
