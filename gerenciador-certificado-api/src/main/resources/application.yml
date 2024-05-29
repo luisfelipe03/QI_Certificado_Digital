@@ -16,3 +16,28 @@ spring:
   security:
     user:
       password: password
+
+---
+
+# Profile: production
+spring:
+  config:
+    activate:
+      on-profile: production
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/certificate_manage_db
+    username: postgres
+    password: Info@1234
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  security:
+    user:
+      password: ${SECURITY_PASSWORD}

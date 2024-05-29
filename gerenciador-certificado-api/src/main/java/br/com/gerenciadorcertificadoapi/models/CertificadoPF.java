@@ -31,6 +31,7 @@ public class CertificadoPF {
     private LocalDate dataVencimento;
     @Enumerated(EnumType.STRING)
     private TipoCertificado tipoCertificado;
+    @Builder.Default
     @Column(nullable = false)
     private boolean isValido = false;
 

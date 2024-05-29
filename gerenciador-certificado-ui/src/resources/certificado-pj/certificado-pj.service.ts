@@ -2,7 +2,7 @@ import { CertificadoPJ, CertificadoPJResponse } from './certificado-pj.resources
 import { useAuth } from '@/resources';
 
 class CertificadoPJService {
-    baseUrl: string = 'http://localhost:8080/api/certificado-pj';
+    baseUrl: string = process.env.NEXT_PUBLIC_API_URL + '/api/certificado-pj';
     auth = useAuth();
 
     async getAllByTipo(tipo: String, page: number, limit: number): Promise<CertificadoPJResponse> {

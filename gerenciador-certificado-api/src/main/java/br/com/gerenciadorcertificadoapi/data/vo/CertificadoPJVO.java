@@ -23,5 +23,6 @@ public class CertificadoPJVO {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataVencimento;
     private TipoCertificado tipoCertificado;
+    @Builder.Default
     private boolean isValido = false;
 }

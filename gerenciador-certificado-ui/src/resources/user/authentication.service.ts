@@ -2,7 +2,7 @@ import { AccessToken, Credentials, User, UserSessionToken } from './users.resour
 import jwt from 'jwt-decode';
 
 class AuthService {
-    baseURL = 'http://localhost:8080/api/users';
+    baseURL = process.env.NEXT_PUBLIC_API_URL + '/api/users';
     static AUTH_PARAM: string = '_auth';
 
     async authenticate(credentials: Credentials): Promise<AccessToken> {

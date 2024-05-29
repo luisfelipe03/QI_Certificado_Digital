@@ -2,7 +2,7 @@ import { CertificadoPF, CertificadoPFResponse } from './certificado-pf.resources
 import { useAuth } from '@/resources'
 
 class CertificadoPFService {
-    baseUrl: string = 'http://localhost:8080/api/certificado-pf';
+    baseUrl: string = process.env.NEXT_PUBLIC_API_URL + '/api/certificado-pf';
     auth = useAuth();
 
     async getAll(page: number = 0, limit: number = 10) : Promise<CertificadoPFResponse> {
