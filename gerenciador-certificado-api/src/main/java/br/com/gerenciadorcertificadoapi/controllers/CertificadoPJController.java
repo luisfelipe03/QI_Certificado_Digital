@@ -74,7 +74,8 @@ public class CertificadoPJController {
 
             // Verificar se o certificado é de pessoa física
             if (!CertificadoUtils.isCertificadoPessoaJuridica(certificado)) {
-                return ResponseEntity.badRequest().body("O certificado fornecido não é de pessoa jurídica.");
+                Map<String, String> json = Map.of("error", "O certificado fornecido não é de pessoa jurídica.");
+                return ResponseEntity.badRequest().body(json);
             }
 
             // Crianção de um objeto para armazenar as informações do certificado

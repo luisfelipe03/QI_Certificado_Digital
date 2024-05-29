@@ -72,7 +72,8 @@ public class CertificadoPFController {
             X509Certificate certificado = CertificadoUtils.carregarCertificado(arquivoPfx.getBytes(), senha);
 
             if (!CertificadoUtils.isCertificadoPessoaFisica(certificado)) {
-                return ResponseEntity.badRequest().body("O certificado fornecido não é de pessoa física.");
+                Map<String, String> json = Map.of("error", "O certificado fornecido não é de pessoa física.");
+                return ResponseEntity.badRequest().body(json);
             }
 
             // Crianção de um objeto para armazenar as informações do certificado
