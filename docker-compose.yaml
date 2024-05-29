@@ -31,7 +31,6 @@ services:
       dockerfile: Dockerfile
       context: ./gerenciador-certificado-api
     container_name: certificadoapi
-    restart: on-failure
     depends_on:
       - db
     ports:

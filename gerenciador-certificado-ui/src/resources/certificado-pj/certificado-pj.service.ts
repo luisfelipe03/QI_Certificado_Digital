@@ -61,6 +61,12 @@ class CertificadoPJService {
             const errorMessage = await response.text();
             throw new Error(errorMessage);
         }
+
+        if(response.status !== 201) {
+            const responseError = await response.json();
+            console.log(responseError);
+            throw new Error(responseError.error);
+        }
         return await response.json();
     }
 

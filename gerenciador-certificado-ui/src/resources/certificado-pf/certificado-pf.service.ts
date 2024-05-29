@@ -5,7 +5,7 @@ class CertificadoPFService {
     baseUrl: string = process.env.NEXT_PUBLIC_API_URL + '/api/certificado-pf';
     auth = useAuth();
 
-    async getAll(page: number = 0, limit: number = 10) : Promise<CertificadoPFResponse> {
+    async getAll(page: number, limit: number) : Promise<CertificadoPFResponse> {
         const useSession = this.auth.getUserSession();
         const response = await fetch(`${this.baseUrl}/validos?page=${page}&limit=${limit}`, {
             headers: {

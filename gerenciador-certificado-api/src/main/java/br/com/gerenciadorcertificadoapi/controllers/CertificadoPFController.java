@@ -87,7 +87,8 @@ public class CertificadoPFController {
             // Retornar as informações do certificado
             return ResponseEntity.status(HttpStatus.CREATED).body(service.create(informacoes));
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao ler o arquivo PFX.");
+            Map<String, String> json = Map.of("error", "Erro ao ler o arquivo PFX.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);
         } catch (Exception e) {
             Map<String, String> json = Map.of("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);

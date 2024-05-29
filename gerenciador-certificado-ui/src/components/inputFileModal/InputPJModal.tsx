@@ -52,8 +52,9 @@ export const InputPJModal: React.FC<InputPJModalProps> = ({ open, setOpen,  onAd
                 setOpen(false);
                 onAddCertificate(); // Chama o callback para atualizar a lista de certificados
             } catch (error) {
-                // Resposta da requisição post service.create
-                notification.notify('Erro ao adicionar o certificado. Tente novamente.', 'error');
+                const errorMessage = (error as Error).message;
+                notification.notify(errorMessage, 'error' as const);
+                return;
             }
         }
     });
