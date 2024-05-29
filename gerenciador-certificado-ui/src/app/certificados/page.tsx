@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { ArrowLeftStartOnRectangleIcon, BuildingOfficeIcon, UserCircleIcon, BriefcaseIcon, ClipboardIcon, HomeIcon, ScaleIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import { ToastContainer } from 'react-toastify';
-import { AuthenticatedPage } from '@/components';
+import { AuthenticatedPage, RenderIf } from '@/components';
+import { useAuth } from '@/resources';
+import { useRouter } from 'next/navigation';
 
 interface CardLinkProps {
   href: string;
@@ -20,19 +22,47 @@ const CardLink: React.FC<CardLinkProps> = ({ href, title, Icon }) => (
   </Link>
 );
 
-export default function Home() {
+export default function CertificadosPage() {
+
+  const auth = useAuth();
+  const user = auth.getUserSession();
+  const router = useRouter();
+
+  function getDoisPrimeirosNomes(nomeCompleto: string | undefined) {
+    if (nomeCompleto && typeof nomeCompleto === 'string') {
+        const partesDoNome = nomeCompleto.split(' ');
+        return partesDoNome.slice(0, 2).join(' ');
+    }
+    return 'Usuário';
+  };
+
+  function logout(){
+    auth.invalidateSession();
+    router.push("/login");
+}
+
   return (
     <AuthenticatedPage>
     <div className="min-h-screen flex flex-col">
       <header className="bg-blue-950 text-white py-3">
         <div className="container mx-auto flex justify-between items-center px-4">
-          <Link href="/" passHref>
-          <Image src="/images/logo.png" alt="Logo" width={120} height={40} />
+          <Link href="/certificados" passHref>
+            <Image src="/images/logo.png" alt="Logo" width={120} height={40} />
           </Link>
-          <button className="flex items-center space-x-2 bg-red-500 px-4 py-2 rounded text-white hover:bg-red-600">
-            <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />
-            <span>Logout</span>
-          </button>
+          <RenderIf condition={!!user}>
+                    <div className="flex items-center">
+                        <div className="relative">
+                            <span className="w-64 py-3 px-6 text-md">
+                                Olá, {getDoisPrimeirosNomes(user?.nome)}
+                            </span>
+                            <span className="w-64 py-3 px-6 text-sm">
+                                <a href="#" onClick={logout}>
+                                    Sair
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </RenderIf>
         </div>
       </header>
       <main className="flex-grow flex justify-center items-center py-10 bg-gray-100">
