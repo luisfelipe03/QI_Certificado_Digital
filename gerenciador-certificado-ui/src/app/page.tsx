@@ -1,58 +1,243 @@
-import Link from 'next/link';
-import { ArrowLeftStartOnRectangleIcon, BuildingOfficeIcon, UserCircleIcon, BriefcaseIcon, ClipboardIcon, HomeIcon, ScaleIcon } from '@heroicons/react/24/solid';
-import Image from 'next/image';
-import { ToastContainer } from 'react-toastify';
+'use client';
 
-interface CardLinkProps {
-  href: string;
-  title: string;
-  Icon: React.ElementType;
+import { useState } from 'react';
+import { useFormik } from 'formik';
+import { Button, FieldError, InputText, RenderIf, Template, useNotification } from '@/components';
+import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
+import { useAuth } from '@/resources/index';
+import { useRouter } from 'next/navigation';
+import { AccessToken, Credentials } from '@/resources/user/users.resource';
+import { ToastContainer } from 'react-toastify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import * as Yup from 'yup';
+
+export interface LoginForm {
+    email: string;
+    senha: string;
 }
 
-const CardLink: React.FC<CardLinkProps> = ({ href, title, Icon }) => (
-  <Link href={href} passHref>
-    <div className="flex flex-col items-center justify-center bg-blue-500 text-white text-center py-10 rounded-lg hover:bg-blue-600 m-2 cursor-pointer transition-all duration-200 w-60 h-60">
-      <Icon className="h-12 w-12 mb-4" />
-      {title}
-    </div>
-  </Link>
-);
+export const formLoginScheme: LoginForm = {
+    email: '',
+    senha: '',
+};
 
-export default function Home() {
-  return (
-    <div className="min-h-screen flex flex-col">
-      <header className="bg-blue-950 text-white py-3">
-        <div className="container mx-auto flex justify-between items-center px-4">
-          <Link href="/" passHref>
-          <Image src="/images/logo.png" alt="Logo" width={120} height={40} />
-          </Link>
-          <button className="flex items-center space-x-2 bg-red-500 px-4 py-2 rounded text-white hover:bg-red-600">
-            <ArrowLeftStartOnRectangleIcon className="h-6 w-6" />
-            <span>Logout</span>
-          </button>
-        </div>
-      </header>
-      <main className="flex-grow flex justify-center items-center py-10 bg-gray-100">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          <CardLink href="/PF" title="Pessoa Física" Icon={UserCircleIcon} />
-          <CardLink href="/LR" title="Lucro Real" Icon={BuildingOfficeIcon} />
-          <CardLink href="/LP" title="Lucro Presumido" Icon={BuildingOfficeIcon} />
-          <CardLink href="/MEI" title="MEI" Icon={HomeIcon} />
-          <CardLink href="/SIMPLES" title="Simples Nacional" Icon={HomeIcon} />
-        </div>
-      </main>
-      <footer className="bg-blue-950 p-4 mt-8">
-            <div className="container mx-auto text-center text-white">
-                &copy; 2024 QI Assessoria. Todos os direitos reservados.
-            </div>
-        </footer>
-        <ToastContainer position='top-right'
+export const ValidationLoginScheme = Yup.object().shape({
+    email: Yup.string().trim().email('Email inválido').required('O email é obrigatório'),
+    senha: Yup.string().required('A senha é obrigatória').min(8, 'A senha deve ter no mínimo 8 caracteres'),
+});
+
+export interface CadastroForm {
+    nome?: string;
+    email: string;
+    senha: string;
+    senhaMatch?: string;
+}
+
+export const formCadastroScheme: CadastroForm = {
+    nome: '',
+    email: '',
+    senha: '',
+    senhaMatch: ''
+};
+
+export const ValidationCadastroScheme = Yup.object().shape({
+    nome: Yup.string().required('O nome é obrigatório'),
+    email: Yup.string().trim().email('Email inválido').required('O email é obrigatório'),
+    senha: Yup.string().required('A senha é obrigatória').min(8, 'A senha deve ter no mínimo 8 caracteres'),
+    senhaMatch: Yup.string().oneOf([Yup.ref('senha')], 'As senhas não coincidem')
+});
+
+export default function LoginPage() {
+    const [newUserState, setNewUserState] = useState<boolean>(false);
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    const auth = useAuth();
+    const router = useRouter();
+    const notification = useNotification();
+
+    const loginFormik = useFormik<LoginForm>({
+        initialValues: formLoginScheme,
+        validationSchema: ValidationLoginScheme,
+        onSubmit: async (values: LoginForm) => {
+            const credentials: Credentials = {email: values.email, senha: values.senha}
+            try {
+                const accessToken: AccessToken = await auth.authenticate(credentials);
+                auth.initSession(accessToken);
+                loginFormik.resetForm();
+                router.push('/home');
+            } catch (error: any) {
+                const message = error?.message;
+                notification.notify(message, 'error');
+            }   
+        },
+    });
+
+    const cadastroFormik = useFormik<CadastroForm>({
+        initialValues: formCadastroScheme,
+        validationSchema: ValidationCadastroScheme,
+        onSubmit: async (values: CadastroForm) => {
+            try {
+                await auth.save({nome: values.nome, email: values.email, senha: values.senha});
+                setNewUserState(false);
+                loginFormik.resetForm();
+                cadastroFormik.resetForm();
+                notification.notify('Usuário cadastrado com sucesso', 'success');
+            } catch (error: any) {
+                const message = error?.message;
+                notification.notify(message, 'error');
+            }
+        },
+    });
+    
+    return (  
+            <div className="min-h-screen flex items-center justify-center bg-blue-qi">
+                    <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-2 lg:px-8">
+                        <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+                            <img src="/images/logo3.png" alt="Logo" className="mx-auto" />
+                        </div>
+
+                        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+                            <div className="bg-white py-8 px-6 shadow rounded-lg sm:px-10">
+                                <RenderIf condition={!newUserState}>
+                                    <form onSubmit={loginFormik.handleSubmit} className="space-y-6">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Email</label>
+                                            <div className="mt-1 relative rounded-md shadow-sm">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <FaEnvelope className="text-gray-400" />
+                                                </div>
+                                                <InputText
+                                                    style="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    id="email"
+                                                    placeholder="Email"
+                                                    value={loginFormik.values.email}
+                                                    onChange={loginFormik.handleChange}
+                                                />
+                                            </div>
+                                            <FieldError error={loginFormik.errors.email} />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Senha</label>
+                                            <div className="mt-1 relative rounded-md shadow-sm">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <FaLock className="text-gray-400" />
+                                                </div>
+                                                <InputText
+                                                    style="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    id="senha"
+                                                    placeholder="Senha"
+                                                    type={showPassword ? "text" : "password"}
+                                                    value={loginFormik.values.senha}
+                                                    onChange={loginFormik.handleChange}
+                                                />
+                                                <span
+                                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 cursor-pointer"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                >
+                                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                                </span>
+                                            </div>
+                                            <FieldError error={loginFormik.errors.senha} />
+                                        </div>
+
+                                        <Button type="submit" style="w-full bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded-md" label="Entrar" />
+                                        <Button type="button" onClick={() => setNewUserState(true)} style="w-full bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded-md mt-4" label="Cadastrar" />
+                                    </form>
+                                </RenderIf>
+
+                                <RenderIf condition={newUserState}>
+                                    <form onSubmit={cadastroFormik.handleSubmit} className="space-y-6">
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Nome</label>
+                                            <div className="mt-1 relative rounded-md shadow-sm">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <FaUser className="text-gray-400" />
+                                                </div>
+                                                <InputText
+                                                    style="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    id="nome"
+                                                    placeholder="Nome"
+                                                    value={cadastroFormik.values.nome}
+                                                    onChange={cadastroFormik.handleChange}
+                                                />
+                                            </div>
+                                            <FieldError error={cadastroFormik.errors.nome} />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Email</label>
+                                            <div className="mt-1 relative rounded-md shadow-sm">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <FaEnvelope className="text-gray-400" />
+                                                </div>
+                                                <InputText
+                                                    style="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    id="email"
+                                                    placeholder="Email"
+                                                    value={cadastroFormik.values.email}
+                                                    onChange={cadastroFormik.handleChange}
+                                                />
+                                            </div>
+                                            <FieldError error={cadastroFormik.errors.email} />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Senha</label>
+                                            <div className="mt-1 relative rounded-md shadow-sm">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <FaLock className="text-gray-400" />
+                                                </div>
+                                                <InputText
+                                                    style="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    id="senha"
+                                                    placeholder="Senha"
+                                                    type={showPassword ? "text" : "password"}
+                                                    value={cadastroFormik.values.senha}
+                                                    onChange={cadastroFormik.handleChange}
+                                                />
+                                                <span
+                                                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600 cursor-pointer"
+                                                    onClick={() => setShowPassword(!showPassword)}
+                                                >
+                                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                                                </span>
+                                            </div>
+                                            <FieldError error={cadastroFormik.errors.senha} />
+                                        </div>
+
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700">Confirme a senha</label>
+                                            <div className="mt-1 relative rounded-md shadow-sm">
+                                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <FaLock className="text-gray-400" />
+                                                </div>
+                                                <InputText
+                                                    style="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                                    id="senhaMatch"
+                                                    placeholder="Confirme a senha"
+                                                    type={showPassword ? "text" : "password"}
+                                                    value={cadastroFormik.values.senhaMatch}
+                                                    onChange={cadastroFormik.handleChange}
+                                                />
+                                            </div>
+                                            <FieldError error={cadastroFormik.errors.senhaMatch} />
+                                        </div>
+
+                                        <Button type="submit" style="w-full bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded-md" label="Salvar" />
+                                        <Button type="button" onClick={() => setNewUserState(false)} style="w-full bg-red-600 hover:bg-red-500 text-white py-2 px-4 rounded-md mt-4" label="Cancelar" />
+                                    </form>
+                                </RenderIf>
+                            </div>
+                        </div>
+                    </div>
+                    <ToastContainer position='top-right'
                             autoClose={8000}
                             hideProgressBar={false}
                             draggable={false}
                             closeOnClick={true}
                             pauseOnHover={true}
-            />
-    </div>
-  );
+            />    
+            </div>
+    );
 }

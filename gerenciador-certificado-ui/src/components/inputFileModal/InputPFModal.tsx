@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+'use client'; 
+
+import { useState } from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { RenderIf, useNotification, Button, FieldError } from '@/components';
