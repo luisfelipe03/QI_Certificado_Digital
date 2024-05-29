@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/certificado-pj")
@@ -88,9 +89,11 @@ public class CertificadoPJController {
             // Retornar as informações do certificado
             return ResponseEntity.status(HttpStatus.CREATED).body(service.create(informacoes));
         } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao ler o arquivo PFX.");
+            Map<String, String> json = Map.of("error", "Erro ao ler o arquivo PFX.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao processar o certificado: " + e.getMessage());
+            Map<String, String> json = Map.of("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);
         }
     }
 

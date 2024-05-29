@@ -56,11 +56,6 @@ class CertificadoPJService {
                 "Authorization": `Bearer ${useSession?.accessToken}`
             }
         });
-        if (!response.ok) {
-            // Se a resposta não for bem-sucedida, lança um erro com a mensagem do corpo da resposta
-            const errorMessage = await response.text();
-            throw new Error(errorMessage);
-        }
 
         if(response.status !== 201) {
             const responseError = await response.json();
