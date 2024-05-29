@@ -1,8 +1,10 @@
 package br.com.gerenciadorcertificadoapi.config.jwt;
 
+import br.com.gerenciadorcertificadoapi.exception.InvalidTokenException;
 import br.com.gerenciadorcertificadoapi.models.User;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -39,5 +41,21 @@ public class JwtService {
         return Map.of(
                 "nome", user.getNome()
         );
+    }
+
+    public String getEmailFromToken(String token) {
+        try{
+            JwtParser build = Jwts.parser()
+                    .verifyWith(keyGenerator.getKey())
+                    .build();
+
+            Jws<Claims> claimsJws = build.parseSignedClaims(token);
+
+            Claims claims = claimsJws.getPayload();
+
+            return claims.getSubject();
+        } catch (JwtException e) {
+            throw new InvalidTokenException(e.getMessage());
+        }
     }
 }

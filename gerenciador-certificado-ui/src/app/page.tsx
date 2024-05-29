@@ -65,6 +65,7 @@ export default function LoginPage() {
                 auth.initSession(accessToken);
                 loginFormik.resetForm();
                 router.push('/home');
+                window.location.reload();
             } catch (error: any) {
                 const message = error?.message;
                 notification.notify(message, 'error');

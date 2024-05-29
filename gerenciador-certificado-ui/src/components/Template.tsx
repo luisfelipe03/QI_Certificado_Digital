@@ -51,7 +51,7 @@ const Header: React.FC = () => {
     return (
         <header className="bg-blue-950 text-white py-3" >
             <div className="container mx-auto flex justofy-between items-center px-4">
-                <Link href="/" passHref>
+                <Link href="/home" passHref>
                     <Image src="/images/logo.png" alt="Logo" width={120} height={40} />
                 </Link>
             </div>
