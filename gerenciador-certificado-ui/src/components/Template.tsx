@@ -12,7 +12,7 @@ export const Template: React.FC<TemplateProps> = ({ children, loading}) => {
     return (
         <>
             <Header />
-            <div className="container mx-auto mt-8 px-4 text-black">
+            <div className="container mx-auto mt-8 mb-8 px-4 text-black">
                 {loading && (
                     <div className="flex items-center justify-center">
                         <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-blue-500 border-solid mr-3"></div>

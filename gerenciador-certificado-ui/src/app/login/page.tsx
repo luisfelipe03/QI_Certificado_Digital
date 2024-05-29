@@ -12,36 +12,36 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import * as Yup from 'yup';
 
-export interface LoginForm {
+interface LoginForm {
     email: string;
     senha: string;
 }
 
-export const formLoginScheme: LoginForm = {
+const formLoginScheme: LoginForm = {
     email: '',
     senha: '',
 };
 
-export const ValidationLoginScheme = Yup.object().shape({
+const ValidationLoginScheme = Yup.object().shape({
     email: Yup.string().trim().email('Email inválido').required('O email é obrigatório'),
     senha: Yup.string().required('A senha é obrigatória').min(8, 'A senha deve ter no mínimo 8 caracteres'),
 });
 
-export interface CadastroForm {
+interface CadastroForm {
     nome?: string;
     email: string;
     senha: string;
     senhaMatch?: string;
 }
 
-export const formCadastroScheme: CadastroForm = {
+const formCadastroScheme: CadastroForm = {
     nome: '',
     email: '',
     senha: '',
     senhaMatch: ''
 };
 
-export const ValidationCadastroScheme = Yup.object().shape({
+const ValidationCadastroScheme = Yup.object().shape({
     nome: Yup.string().required('O nome é obrigatório'),
     email: Yup.string().trim().email('Email inválido').required('O email é obrigatório'),
     senha: Yup.string().required('A senha é obrigatória').min(8, 'A senha deve ter no mínimo 8 caracteres'),

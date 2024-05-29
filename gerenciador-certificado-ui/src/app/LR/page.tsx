@@ -131,10 +131,12 @@ export default function LucroRealPage() {
                             <option value={30}>30</option>
                         </select>
                     </div>
+
                     <div className='flex-grow'></div>
+
                     <div className='flex space-x-4 items-center'>
                         <div className='relative'>
-                        <select 
+                            <select 
                                 value={searchType}
                                 onChange={handleSearchTypeChange}
                                 className='border px-4 py-2 rounded-l-lg text-gray-900'
