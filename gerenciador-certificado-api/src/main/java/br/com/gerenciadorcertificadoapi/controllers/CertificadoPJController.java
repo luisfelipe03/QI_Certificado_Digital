@@ -66,7 +66,8 @@ public class CertificadoPJController {
         try {
             // Verificar se o arquivo é nulo ou vazio
             if (arquivoPfx == null || arquivoPfx.isEmpty()) {
-                return ResponseEntity.badRequest().body("O arquivo não foi enviado.");
+                Map<String, String> json = Map.of("error", "O arquivo não foi enviado.");
+                return ResponseEntity.badRequest().body(json);
             }
 
             // Carregar o certificado digital a partir do arquivo PFX
@@ -91,10 +92,10 @@ public class CertificadoPJController {
             return ResponseEntity.status(HttpStatus.CREATED).body(service.create(informacoes));
         } catch (IOException e) {
             Map<String, String> json = Map.of("error", "Erro ao ler o arquivo PFX.");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);
+            return ResponseEntity.badRequest().body(json);
         } catch (Exception e) {
             Map<String, String> json = Map.of("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);
+            return ResponseEntity.badRequest().body(json);
         }
     }
 
