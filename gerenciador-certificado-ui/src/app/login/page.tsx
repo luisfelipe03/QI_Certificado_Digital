@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useFormik } from 'formik';
-import { Button, FieldError, InputText, RenderIf, Template, useNotification } from '@/components';
+import { Button, FieldError, InputText, RenderIf, useNotification } from '@/components';
 import { FaEnvelope, FaLock, FaUser } from 'react-icons/fa';
 import { useAuth } from '@/resources/index';
 import { useRouter } from 'next/navigation';

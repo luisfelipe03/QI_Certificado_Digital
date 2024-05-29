@@ -1,6 +1,6 @@
 "use client";
 import Link from 'next/link';
-import { ArrowLeftStartOnRectangleIcon, BuildingOfficeIcon, UserCircleIcon, BriefcaseIcon, ClipboardIcon, HomeIcon, ScaleIcon } from '@heroicons/react/24/solid';
+import { BuildingOfficeIcon, UserCircleIcon, HomeIcon } from '@heroicons/react/24/solid';
 import Image from 'next/image';
 import { ToastContainer } from 'react-toastify';
 import { AuthenticatedPage, RenderIf } from '@/components';
@@ -55,7 +55,7 @@ export default function CertificadosPage() {
                             <span className="w-64 py-3 px-6 text-md">
                                 Olá, {getDoisPrimeirosNomes(user?.nome)}
                             </span>
-                            <span className="w-64 py-3 px-6 text-sm">
+                            <span className="w-64 py-3 px-6 text-md">
                                 <a href="#" onClick={logout}>
                                     Sair
                                 </a>
@@ -75,10 +75,10 @@ export default function CertificadosPage() {
         </div>
       </main>
       <footer className="bg-blue-950 p-4 mt-8">
-            <div className="container mx-auto text-center text-white">
-                &copy; 2024 QI Assessoria. Todos os direitos reservados.
-            </div>
-        </footer>
+          <div className="container mx-auto text-center text-white">
+              &copy; 2024 QI Assessoria. Todos os direitos reservados.
+          </div>
+      </footer>
         <ToastContainer position='top-right'
                             autoClose={8000}
                             hideProgressBar={false}

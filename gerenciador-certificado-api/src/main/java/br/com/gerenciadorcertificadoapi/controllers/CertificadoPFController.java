@@ -2,6 +2,7 @@ package br.com.gerenciadorcertificadoapi.controllers;
 
 import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPFVO;
 import br.com.gerenciadorcertificadoapi.data.vo.PaginatedResponse;
+import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
 import br.com.gerenciadorcertificadoapi.services.CertificadoPFService;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/certificado-pf")
@@ -80,13 +82,15 @@ public class CertificadoPFController {
             informacoes.setDataEmissao(CertificadoUtils.extrairDataEmissao(certificado));
             informacoes.setDataVencimento(CertificadoUtils.extrairDataVencimento(certificado));
             informacoes.setValido(CertificadoUtils.isValido(certificado));
+            informacoes.setTipoCertificado(TipoCertificado.PF);
 
             // Retornar as informações do certificado
             return ResponseEntity.status(HttpStatus.CREATED).body(service.create(informacoes));
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao ler o arquivo PFX.");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro ao processar o certificado: " + e.getMessage());
+            Map<String, String> json = Map.of("error", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(json);
         }
     }
 

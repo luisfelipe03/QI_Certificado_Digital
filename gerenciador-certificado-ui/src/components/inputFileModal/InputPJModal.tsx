@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useFormik } from 'formik';
-import { RenderIf, useNotification, Button, InputText, FieldError } from '@/components/index';
+import { RenderIf, useNotification, Button, FieldError } from '@/components/index';
 import { useCertificadoPJService } from '@/resources/certificado-pj/certificado-pj.service';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';

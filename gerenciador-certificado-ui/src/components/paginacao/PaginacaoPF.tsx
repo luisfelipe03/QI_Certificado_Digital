@@ -1,5 +1,4 @@
 import React from "react";
-import { CertificadoPF } from '@/resources/certificado-pf/certificado-pf.resources'
 
 interface PaginacaoPFProps {
     paginaAtual: number;

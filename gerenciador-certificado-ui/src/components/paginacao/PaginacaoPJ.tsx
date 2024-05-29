@@ -1,5 +1,4 @@
 import React from "react";
-import { CertificadoPJ } from '@/resources/certificado-pj/certificado-pj.resources'
 
 interface PaginacaoPJProps {
     paginaAtual: number;

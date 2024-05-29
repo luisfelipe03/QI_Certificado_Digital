@@ -51,17 +51,26 @@ class AuthService {
     }
 
     setUserSession(userSession: UserSessionToken) {
-        localStorage.setItem(AuthService.AUTH_PARAM, JSON.stringify(userSession));
+        try {
+            localStorage.setItem(AuthService.AUTH_PARAM, JSON.stringify(userSession));
+        } catch (error) {
+            console.error('Erro ao salvar sessão', error);
+        }
     }
 
     getUserSession() : UserSessionToken | null {
-        const userSession = localStorage.getItem(AuthService.AUTH_PARAM);
-        if(!userSession) {
+        try {
+            const userSession = localStorage.getItem(AuthService.AUTH_PARAM);
+            if(!userSession) {
+                return null;
+            }
+            
+            const token: UserSessionToken = JSON.parse(userSession);
+            return token;
+        } catch (error) {
+            console.error('Erro ao recuperar sessão', error);
             return null;
         }
-        
-        const token: UserSessionToken = JSON.parse(userSession);
-        return token;
     }
 
     isSessionValid(): boolean {
@@ -81,7 +90,9 @@ class AuthService {
     invalidateSession(): void {
         try{
             localStorage.removeItem(AuthService.AUTH_PARAM);
-        }catch(error){}
+        }catch(error){
+            console.error('Erro ao remover sessão', error);
+        }
     }
 
 }

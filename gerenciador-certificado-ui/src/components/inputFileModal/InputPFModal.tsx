@@ -40,18 +40,21 @@ export const InputPFModal: React.FC<InputPFModalProps> = ({ open, setOpen, onAdd
             const form = new FormData();
             form.append('certificado', values.certificado as Blob);
             form.append('senha', values.senha);
-    
+
             try {
                 await service.create(form); // Aguarda a criação do certificado
+            } catch (error) {
+                const errorMessage = (error as Error).message;
+                notification.notify(errorMessage, 'error' as const);
+                return;
+            } finally {
                 formik.resetForm();
                 notification.notify('Certificado adicionado com sucesso', 'success');
                 setOpen(false);
-                onAddCertificate(); // Chama o callback para atualizar a lista de certificados
-            } catch (error) {
-                // Resposta da requisição post service.create
-                notification.notify('Erro ao adicionar o certificado. Tente novamente.', 'error');
-                
+                onAddCertificate(); 
             }
+            
+            
         }
     });
     

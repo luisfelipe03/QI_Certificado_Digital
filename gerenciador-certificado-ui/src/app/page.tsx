@@ -1,8 +1,6 @@
 'use client';
 
 import { useAuth } from '@/resources';
-import LoginPage from './login/page';
-import CertificadosPage from './certificados/page';
 import { useRouter } from 'next/navigation'
 
 export default function Page() {
