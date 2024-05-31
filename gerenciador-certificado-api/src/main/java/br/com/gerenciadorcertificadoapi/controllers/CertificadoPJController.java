@@ -2,6 +2,8 @@ package br.com.gerenciadorcertificadoapi.controllers;
 
 import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPJVO;
 import br.com.gerenciadorcertificadoapi.data.vo.PaginatedResponse;
+import br.com.gerenciadorcertificadoapi.mapper.ModelMapper;
+import br.com.gerenciadorcertificadoapi.models.CertificadoPJ;
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
 import br.com.gerenciadorcertificadoapi.services.CertificadoPJService;
 import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
@@ -87,6 +89,11 @@ public class CertificadoPJController {
             informacoes.setDataVencimento(CertificadoUtils.extrairDataVencimento(certificado));
             informacoes.setTipoCertificado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
             informacoes.setValido(CertificadoUtils.isValido(certificado));
+
+            if(!CertificadoUtils.isValidoPJ(ModelMapper.parseObject(informacoes, CertificadoPJ.class))) {
+                Map<String, String> json = Map.of("error", "O certificado fornecido está expirado.");
+                return ResponseEntity.badRequest().body(json);
+            }
 
             // Retornar as informações do certificado
             return ResponseEntity.status(HttpStatus.CREATED).body(service.create(informacoes));
