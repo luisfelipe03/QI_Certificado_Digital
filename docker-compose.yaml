@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   db:
-    image: postgres
+    image: postgres:13
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -40,6 +40,9 @@ services:
     environment:
       - "POSTGRES_HOST=db"
       - "POSTGRES_PORT=5432"
+      - "POSTGRES_DB=certificate_manage_db"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=Info@1234"
       - "SECURITY_PASSWORD=password"
 
   frontapp:
@@ -54,9 +57,10 @@ services:
       - '3000:3000'
     networks:
       - certificadonetwork
-    expose:
-      - 3000
+    environment:
+      - NEXT_PUBLIC_API_URL=http://certificadoapi:8080
 
 networks:
   certificadonetwork:
     driver: bridge
+
