@@ -7,14 +7,17 @@ WORKDIR /app
 # Copie os arquivos de definição de dependências para o diretório de trabalho
 COPY package*.json ./
 
-# Instale apenas as dependências de produção
-RUN npm install --production
+# Instale todas as dependências (produção e desenvolvimento)
+RUN npm install
 
 # Copie o restante dos arquivos da aplicação para o diretório de trabalho
 COPY . .
 
 # Construa a aplicação
 RUN npm run build
+
+# Remova as dependências de desenvolvimento
+RUN npm prune --production
 
 # Exponha a porta que a aplicação irá usar
 EXPOSE 3000

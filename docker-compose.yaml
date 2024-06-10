@@ -62,25 +62,7 @@ services:
     environment:
       - NEXT_PUBLIC_API_URL=http://certificadoapi:8080
 
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    restart: always
-    ports:
-      - '9000:9000'
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    environment:
-      - ADMIN_USERNAME=admin
-      - ADMIN_PASSWORD=admin
-    networks:
-      - certificadonetwork
-
 networks:
   certificadonetwork:
     driver: bridge
-
-volumes:
-  portainer_data:
 
