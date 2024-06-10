@@ -3,6 +3,7 @@ import { faRoad } from "@fortawesome/free-solid-svg-icons"
 export { Template, RenderIf } from "./Template"
 export { CertificateTablePJ } from "./tables/CertificateTablePJ"
 export { CertificateTablePF } from "./tables/CertificateTablePF"
+export { CertificateExpiredTablePF } from "./tables/CertificateExpiredTablePF"
 export { InputPFModal } from "./inputFileModal/InputPFModal"
 export { InputPJModal } from "./inputFileModal/InputPJModal"
 export { useNotification } from './notification'
