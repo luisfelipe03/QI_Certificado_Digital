@@ -9,7 +9,7 @@ WORKDIR /app
 COPY --from=builder ./app/target/*.jar ./app.jar
 EXPOSE 8080
 
-ENV POSTGRES_HOST=localhost
+ENV POSTGRES_HOST=db
 ENV POSTGRES_PORT=5432
 ENV POSTGRES_DB=certificate_manage_db
 ENV POSTGRES_USER=postgres
