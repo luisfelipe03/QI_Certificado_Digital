@@ -76,12 +76,12 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ certific
                 <td className="px-6 py-4 whitespace-nowrap">
                     {props.razaoSocial}
                     <RenderIf condition={!props.valido}>
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                        <span className="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                             Vencido
                         </span>
                     </RenderIf>
                     <RenderIf condition={isDueInOneMonthOrLess(props.dataVencimento)}>
-                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                        <span className="ml-2 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                             <RenderIf condition={diasRestantes(props.dataVencimento) === 0}>
                                 Amanhã
                             </RenderIf>
