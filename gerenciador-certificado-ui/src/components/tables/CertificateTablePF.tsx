@@ -86,8 +86,8 @@ export const CertificateTablePF: React.FC<CertificateTablePFProps> = ({ certific
                             <RenderIf condition={diasRestantes(props.dataVencimento) === 0}>
                                 Amanhã
                             </RenderIf>
-                            <RenderIf condition={diasRestantes(props.dataVencimento) > 1}>
-                                Vence em {diasRestantes(props.dataVencimento)} dias
+                            <RenderIf condition={diasRestantes(props.dataVencimento) >= 1}>
+                                Vence em {diasRestantes(props.dataVencimento) + 1} dias
                             </RenderIf>
                         </span>
                     </RenderIf>
