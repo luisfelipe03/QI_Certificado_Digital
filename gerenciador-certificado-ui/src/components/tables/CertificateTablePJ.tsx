@@ -38,6 +38,12 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ certific
         // O JavaScript Date usa meses baseados em zero (0 = janeiro, 11 = dezembro)
         return new Date(year, month - 1, day);
     }
+
+    function diasRestantes(dataVencimento: any) {
+        const hoje = new Date();
+        const dataVenc = parseDateString(dataVencimento);
+        return differenceInDays(dataVenc, hoje);
+    }
     
     function isDueInOneMonthOrLess(dataVencimento: any) {
         const hoje = new Date();
@@ -76,7 +82,12 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ certific
                     </RenderIf>
                     <RenderIf condition={isDueInOneMonthOrLess(props.dataVencimento)}>
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                            Vence em 1 mês ou menos
+                            <RenderIf condition={diasRestantes(props.dataVencimento) === 0}>
+                                Amanhã
+                            </RenderIf>
+                            <RenderIf condition={diasRestantes(props.dataVencimento) > 1}>
+                                Vence em {diasRestantes(props.dataVencimento)} dias
+                            </RenderIf>
                         </span>
                     </RenderIf>
                 </td>
