@@ -1,6 +1,6 @@
 'use client'
 
-import { Template, CertificateTablePF, InputPFModal, PaginacaoPF, AuthenticatedPage, CertificateExpiredTablePF } from '@/components';
+import { Template, CertificateTablePF, InputPFModal, PaginacaoPF, AuthenticatedPage } from '@/components';
 import { CertificadoPF, CertificadoPFResponse } from '@/resources/certificado-pf/certificado-pf.resources'; // Importando CertificadoPFResponse
 import { useCertificadoPFService } from '@/resources/certificado-pf/certificado-pf.service';
 import { useState, useEffect } from 'react';
@@ -162,7 +162,6 @@ export default function PessoaFisicaPage() {
                         <button className='bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600' onClick={handleSearch}>Buscar</button>
                         <button className='bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600' onClick={() => setOpen(true)}>Adicionar</button>
                         <InputPFModal open={open} setOpen={setOpen} onAddCertificate={handleAddCertificate} />
-                        <button className='bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600' onClick={() => console.log('Vencidos')}>Vencidos</button>
                     </div>
                 </div>
 

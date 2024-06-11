@@ -6,12 +6,10 @@ import br.com.gerenciadorcertificadoapi.excepions.UniqueDocumentException;
 import br.com.gerenciadorcertificadoapi.mapper.ModelMapper;
 import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
 import br.com.gerenciadorcertificadoapi.repositories.CertificadoPFRepository;
-import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -39,14 +37,7 @@ public class CertificadoPFServiceImpl implements CertificadoPFService {
     }
 
     public long countAll() {
-        return repository.countByValidoTrue();
-    }
-
-    @Override
-    public List<CertificadoPFVO> findAllExpired() {
-        logger.info("Listando todos os certificados PF vencido.");
-        List<CertificadoPF> pf = repository.findAllExpiredOrderByDataVencimentoDesc();
-        return ModelMapper.parseListObjects(pf, CertificadoPFVO.class);
+        return repository.count();
     }
 
     @Override

@@ -25,7 +25,7 @@ public class CertificadoPFController {
     @Autowired
     CertificadoPFService service;
 
-    @GetMapping("/validos")
+    @GetMapping
     @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
     public PaginatedResponse<CertificadoPFVO> findAll(
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
@@ -33,12 +33,6 @@ public class CertificadoPFController {
         List<CertificadoPFVO> certificados = service.findAllPaginado(page, limit);
         long total = service.countAll(); // Método no serviço que retorna o total de registros
         return new PaginatedResponse<>(certificados, total);
-    }
-
-    @GetMapping("/vencidos")
-    @ResponseStatus(code = org.springframework.http.HttpStatus.OK)
-    public List<CertificadoPFVO> findAllExpired() {
-        return service.findAllExpired();
     }
 
     @GetMapping("/id/{uuid}")

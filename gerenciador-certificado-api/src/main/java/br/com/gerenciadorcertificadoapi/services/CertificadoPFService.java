@@ -9,7 +9,6 @@ public interface CertificadoPFService {
 
     List<CertificadoPFVO> findAll();
     List<CertificadoPFVO> findAllPaginado(int page, int itens);
-    List<CertificadoPFVO> findAllExpired();
     CertificadoPFVO getById(String uuid);
     CertificadoPFVO create(CertificadoPFVO certificadoVO);
     void delete(String uuid);

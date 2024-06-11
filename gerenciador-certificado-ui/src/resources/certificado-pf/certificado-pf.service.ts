@@ -7,7 +7,7 @@ class CertificadoPFService {
 
     async getAll(page: number, limit: number) : Promise<CertificadoPFResponse> {
         const useSession = this.auth.getUserSession();
-        const response = await fetch(`${this.baseUrl}/validos?page=${page}&limit=${limit}`, {
+        const response = await fetch(`${this.baseUrl}?page=${page}&limit=${limit}`, {
             headers: {
                 "Authorization": `Bearer ${useSession?.accessToken}`
             }
