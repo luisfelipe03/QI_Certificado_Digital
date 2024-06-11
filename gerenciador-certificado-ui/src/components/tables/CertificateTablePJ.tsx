@@ -5,6 +5,8 @@ import { CertificadoPJ } from '@/resources/certificado-pj/certificado-pj.resourc
 import { useCertificadoPJService } from '@/resources/certificado-pj/certificado-pj.service';
 import { Button } from '../button/Button'
 import { toast } from 'react-toastify';
+import { differenceInDays, isBefore } from 'date-fns';
+import { RenderIf } from '..';
 
 interface CertificateTablePJProps {
     certificadoPJ: CertificadoPJ[];
@@ -31,6 +33,26 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ certific
         }
     }
 
+    function parseDateString(dateString: any) {
+        const [day, month, year] = dateString.split('/').map(Number);
+        // O JavaScript Date usa meses baseados em zero (0 = janeiro, 11 = dezembro)
+        return new Date(year, month - 1, day);
+    }
+    
+    function isDueInOneMonthOrLess(dataVencimento: any) {
+        const hoje = new Date();
+        const dataVenc = parseDateString(dataVencimento);
+    
+        // Verifica se a data de vencimento já passou
+        if (isBefore(dataVenc, hoje)) {
+            return false;
+        }
+    
+        // Verifica se falta um mês ou menos para a data de vencimento
+        const diasRestantes = differenceInDays(dataVenc, hoje);
+        return diasRestantes <= 30;
+    }
+
     const openConfirmDelete = (uuid: string) => {
         setConfirmDelete({ show: true, uuid });
     };
@@ -45,7 +67,19 @@ export const CertificateTablePJ: React.FC<CertificateTablePJProps> = ({ certific
         }
         return certificados.map((props) => (
             <tr key={props.uuid}>
-                <td className="px-6 py-4 whitespace-nowrap">{props.razaoSocial}</td>
+                <td className="px-6 py-4 whitespace-nowrap">
+                    {props.razaoSocial}
+                    <RenderIf condition={!props.valido}>
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                            Vencido
+                        </span>
+                    </RenderIf>
+                    <RenderIf condition={isDueInOneMonthOrLess(props.dataVencimento)}>
+                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                            Vence em 1 mês ou menos
+                        </span>
+                    </RenderIf>
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap">{props.cnpj}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{props.dataEmissao}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{props.dataVencimento}</td>

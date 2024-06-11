@@ -25,7 +25,7 @@ public class CertificadoPJController {
     @Autowired
     CertificadoPJService service;
 
-    @GetMapping("/{tipoCertificado}/validos")
+    @GetMapping("/{tipoCertificado}")
     @ResponseStatus(code = HttpStatus.OK)
     public PaginatedResponse<CertificadoPJVO> findAll(@PathVariable("tipoCertificado") String tipoCertificado,
                                                       @RequestParam(value = "page", required = false, defaultValue = "0") int page,
@@ -33,12 +33,6 @@ public class CertificadoPJController {
         List<CertificadoPJVO> certificados = service.findAllPaginado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()), page, limit);
         long total = service.countAllByTipo(TipoCertificado.valueOf(tipoCertificado.toUpperCase())); // Método no serviço que retorna o total de registros
         return new PaginatedResponse<>(certificados, total);
-    }
-
-    @GetMapping("/{tipoCertificado}/vencidos")
-    @ResponseStatus(code = HttpStatus.OK)
-    public List<CertificadoPJVO> findAllExpired(@PathVariable("tipoCertificado") String tipoCertificado) {
-        return service.findAllExpired(TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
     }
 
     @GetMapping("/id/{uuid}")

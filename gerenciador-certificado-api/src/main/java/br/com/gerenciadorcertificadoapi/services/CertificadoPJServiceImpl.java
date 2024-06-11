@@ -7,13 +7,11 @@ import br.com.gerenciadorcertificadoapi.mapper.ModelMapper;
 import br.com.gerenciadorcertificadoapi.models.CertificadoPJ;
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
 import br.com.gerenciadorcertificadoapi.repositories.CertificadoPJRepository;
-import br.com.gerenciadorcertificadoapi.utils.CertificadoUtils;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -30,27 +28,20 @@ public class CertificadoPJServiceImpl implements CertificadoPJService {
     @Override
     public List<CertificadoPJVO> findAll(TipoCertificado tipoCertificado) {
         logger.info("Listando todos os certificados PJ.");
-        List<CertificadoPJ> pj = repository.findAllValidOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado);
+        List<CertificadoPJ> pj = repository.findAllOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado);
         return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
     }
 
     @Override
     public List<CertificadoPJVO> findAllPaginado(TipoCertificado tipoCertificado, int page, int itens) {
         logger.info("Listando todos os certificados PJ.");
-        List<CertificadoPJ> pj = repository.findAllValidOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado,
+        List<CertificadoPJ> pj = repository.findAllOrderByDataVencimentoAscAndTipoCertificado(tipoCertificado,
                 PageRequest.of(page, itens));
         return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
     }
 
     public long countAllByTipo(TipoCertificado tipoCertificado) {
-        return repository.countByValidoTrue(tipoCertificado);
-    }
-
-    @Override
-    public List<CertificadoPJVO> findAllExpired(TipoCertificado tipoCertificado) {
-        logger.info("Listando todos os certificados PJ vencidos.");
-        List<CertificadoPJ> pj = repository.findAllExpiredOrderByDataVencimentoDescAndTipoCertificado(tipoCertificado);
-        return ModelMapper.parseListObjects(pj, CertificadoPJVO.class);
+        return repository.countByTipo(tipoCertificado);
     }
 
     @Override

@@ -77,7 +77,7 @@ export const CertificateTablePF: React.FC<CertificateTablePFProps> = ({ certific
                     </RenderIf>
                     <RenderIf condition={isDueInOneMonthOrLess(props.dataVencimento)}>
                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                            Vence em 1 mês
+                            Vence em 1 mês ou menos
                         </span>
                     </RenderIf>
                 </td>

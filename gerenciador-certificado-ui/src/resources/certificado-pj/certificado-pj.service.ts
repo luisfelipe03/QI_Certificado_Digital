@@ -7,7 +7,7 @@ class CertificadoPJService {
 
     async getAllByTipo(tipo: String, page: number, limit: number): Promise<CertificadoPJResponse> {
         const useSession = this.auth.getUserSession();
-        const response = await fetch(`${this.baseUrl}/${tipo}/validos?page=${page}&limit=${limit}`, {
+        const response = await fetch(`${this.baseUrl}/${tipo}?page=${page}&limit=${limit}`, {
             headers: {
                 "Authorization": `Bearer ${useSession?.accessToken}`
             }

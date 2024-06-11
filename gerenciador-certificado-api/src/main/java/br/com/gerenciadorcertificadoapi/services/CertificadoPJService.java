@@ -10,7 +10,6 @@ public interface CertificadoPJService {
 
     List<CertificadoPJVO> findAllPaginado(TipoCertificado tipoCertificado, int page, int itens);
     List<CertificadoPJVO> findAll(TipoCertificado tipoCertificado);
-    List<CertificadoPJVO> findAllExpired(TipoCertificado tipoCertificado);
     CertificadoPJVO getById(String uuid);
     CertificadoPJVO create(CertificadoPJVO certificadoVO);
     void delete(String uuid);
