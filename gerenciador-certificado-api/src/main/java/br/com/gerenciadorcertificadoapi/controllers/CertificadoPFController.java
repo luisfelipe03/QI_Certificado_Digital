@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -82,8 +84,10 @@ public class CertificadoPFController {
             informacoes.setValido(CertificadoUtils.isValido(certificado));
             informacoes.setTipoCertificado(TipoCertificado.PF);
 
-            if(!CertificadoUtils.isValidoPF(ModelMapper.parseObject(informacoes, CertificadoPF.class))) {
-                Map<String, String> json = Map.of("error", "O certificado fornecido está expirado.");
+            if (!CertificadoUtils.isValidoPF(ModelMapper.parseObject(informacoes, CertificadoPF.class))) {
+                String dataFormatada = informacoes.getDataVencimento()
+                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                Map<String, String> json = Map.of("error", "O certificado fornecido está expirado.\n Venceu no dia " + dataFormatada + ".");
                 return ResponseEntity.badRequest().body(json);
             }
 

@@ -3,6 +3,7 @@ package br.com.gerenciadorcertificadoapi.controllers;
 import br.com.gerenciadorcertificadoapi.data.vo.CertificadoPJVO;
 import br.com.gerenciadorcertificadoapi.data.vo.PaginatedResponse;
 import br.com.gerenciadorcertificadoapi.mapper.ModelMapper;
+import br.com.gerenciadorcertificadoapi.models.CertificadoPF;
 import br.com.gerenciadorcertificadoapi.models.CertificadoPJ;
 import br.com.gerenciadorcertificadoapi.models.enums.TipoCertificado;
 import br.com.gerenciadorcertificadoapi.services.CertificadoPJService;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.cert.X509Certificate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -84,8 +86,10 @@ public class CertificadoPJController {
             informacoes.setTipoCertificado(TipoCertificado.valueOf(tipoCertificado.toUpperCase()));
             informacoes.setValido(CertificadoUtils.isValido(certificado));
 
-            if(!CertificadoUtils.isValidoPJ(ModelMapper.parseObject(informacoes, CertificadoPJ.class))) {
-                Map<String, String> json = Map.of("error", "O certificado fornecido está expirado.");
+            if (!CertificadoUtils.isValidoPF(ModelMapper.parseObject(informacoes, CertificadoPF.class))) {
+                String dataFormatada = informacoes.getDataVencimento()
+                        .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                Map<String, String> json = Map.of("error", "O certificado fornecido está expirado.\n Venceu no dia " + dataFormatada + ".");
                 return ResponseEntity.badRequest().body(json);
             }
 
